@@ -31,9 +31,17 @@ service.interceptors.request.use(
 // 2. 响应拦截器 =》请求响应了执行
 service.interceptors.response.use(
   response => {
+    // 后台返回的数据
+    console.log('后台返回的数据:', response.data)
     // 状态码2xx 走到这里
-    const res = response.data
-    return res
+    const { success, message, data } = response.data
+    if (success) {
+      Message.success(message)
+      return data
+    } else {
+      Message.error(message)
+      return Promise.reject(new Error(message))
+    }
   },
   error => {
     // 状态码2xx以外 走到这里

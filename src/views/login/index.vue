@@ -15,15 +15,15 @@
         </h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mobile">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
+          ref="mobile"
+          v-model="loginForm.mobile"
+          placeholder="请输入手机号"
+          name="mobile"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -34,12 +34,16 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
+        <!-- 说明？：@keyup.enter 回车事件
+         1，在绑定到饿了吗输入框组件上，需要添加.native修饰符才会生效
+         2. .native修饰符，作用：事件穿透
+         -->
         <el-input
           :key="passwordType"
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="Password"
+          placeholder="请输入密码"
           name="password"
           tabindex="2"
           auto-complete="on"
@@ -54,7 +58,7 @@
         :loading="loading"
         type="primary"
         style="width:100%;margin-bottom:30px;"
-        @click.native.prevent="handleLogin"
+        @click="handleLogin"
       >Login
       </el-button>
       <!--登录提示-->
@@ -68,33 +72,32 @@
 </template>
 
 <script>
-import { validUsername } from '@/utils/validate'
-
+import { loginAPI } from '@/api/user'
 export default {
   name: 'Login',
   data() {
-    const validateUsername = (rule, value, callback) => {
-      if (!validUsername(value)) {
-        callback(new Error('Please enter the correct user name'))
-      } else {
-        callback()
-      }
-    }
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('The password can not be less than 6 digits'))
-      } else {
-        callback()
-      }
-    }
     return {
+      // 数据对象
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        mobile: '',
+        password: ''
       },
+      // 校验规则
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        mobile: [
+          // 非空检验
+          { required: true, trigger: 'blur', message: '请输入手机号' },
+          // 正则校验手机号
+          {
+            pattern: /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
+            trigger: 'blur',
+            message: '请输入正确的手机号'
+          }
+        ],
+        password: [
+          { required: true, trigger: 'blur', message: '请输入密码' },
+          { min: 6, max: 16, message: '密码的长度在6-16位之间 ', trigger: 'blur' }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -120,16 +123,14 @@ export default {
         this.$refs.password.focus()
       })
     },
+    // ----------------------------回车事件点击登录--------------------
     handleLogin() {
-      this.$refs.loginForm.validate(valid => {
+      // 兜底校验
+      this.$refs.loginForm.validate(async valid => {
+        console.log('兜底校验：', valid)
         if (valid) {
-          this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          const res = await loginAPI(this.loginForm)
+          console.log('获取的token:', res)
         } else {
           console.log('error submit!!')
           return false

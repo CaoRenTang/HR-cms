@@ -1,25 +1,22 @@
 import axios from 'axios'
-import { MessageBox, Message } from 'element-ui'
+// 消息提示的方法
+import { Message } from 'element-ui'
+// 导入vuex实例
 import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import { getToken } from '@/utils/auth'
 
-// create an axios instance
+// 通过axios.create方法创建了一个新axios实例并配置后台基础地址
+// 说明❓：service和axios用法一样
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  // 动态配置后台请求的基础地址
+  baseURL: process.env.VUE_APP_BASE_API // url = base url + request url
 })
 
-// 1.请求拦截器->发请求之前执行
+// 1. 请求拦截器=》发请求之前执行
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
-
     if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
-      config.headers['X-Token'] = getToken()
+      // 场景：统一添加请求头=》把token加入到请求中
     }
     return config
   },
@@ -30,49 +27,18 @@ service.interceptors.request.use(
   }
 )
 
-// 2.响应拦截器->请求响应了执行
+// response interceptor
+// 2. 响应拦截器 =》请求响应了执行
 service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-   */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
   response => {
+    // 状态码2xx 走到这里
     const res = response.data
-
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
-      Message({
-        message: res.message || 'Error',
-        type: 'error',
-        duration: 5 * 1000
-      })
-
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('user/resetToken').then(() => {
-            location.reload()
-          })
-        })
-      }
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return res
-    }
+    return res
   },
   error => {
+    // 状态码2xx以外 走到这里
     console.log('err' + error) // for debug
+    // 场景：如果token失效了，状态码 401，删除token重新登录
     Message({
       message: error.message,
       type: 'error',

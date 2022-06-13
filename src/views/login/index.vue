@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { loginAPI } from '@/api/user'
+// import { loginAPI } from '@/api/user'
 export default {
   name: 'Login',
   data() {
@@ -129,11 +129,16 @@ export default {
       this.$refs.loginForm.validate(async valid => {
         console.log('兜底校验：', valid)
         if (valid) {
-          const token = await loginAPI(this.loginForm)
-          console.log('获取的token:', token)
+          // 写法1：
+          // const token = await loginAPI(this.loginForm)
+          // console.log('获取的token:', token)
           // 储存token到vuex中(模块化'/user/serToken')
-          this.$store.commit('user/setToken', token)
+          // this.$store.commit('user/setToken', token)
           // 跳转页面
+          // this.$router.push('/')
+          // 写法2：
+          await this.$store.dispatch('user/loginAction', this.loginForm)
+          // 跳转到首页
           this.$router.push('/')
         } else {
           console.log('error submit!!')

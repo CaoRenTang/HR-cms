@@ -16,7 +16,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // config 是请求配置项，其中包含headers
-    console.log('store实例', store)
+    // console.log('store实例', store)
     if (store.getters.token) {
       // 场景：统一添加请求头=》把token加入到请求中
       config.headers.Authorization = `Bearer ${store.getters.token}`
@@ -25,7 +25,7 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
+    // console.log(error) // for debug
     return Promise.reject(error)
   }
 )

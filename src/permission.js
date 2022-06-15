@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     // 没有token，是否在白名单
-    if (VIP.includes(to.path) > -1) {
+    if (VIP.includes(to.path)) {
     // 在白名单放行
       next()
     } else {

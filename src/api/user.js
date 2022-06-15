@@ -14,16 +14,22 @@ export function loginAPI(data) {
   })
 }
 
+/**
+ * @description:获取用户个人信息
+ * @return {*}
+ */
 export function getUserInfoAPI() {
   return request({
     url: '/sys/profile',
     method: 'post'
   })
 }
-
-export function logout() {
+/**
+ * @description:获取用户头像信息
+ * @return {*}
+ */
+export function getUserDetailByIdAPI(id) {
   return request({
-    url: '/vue-admin-template/user/logout',
-    method: 'post'
+    url: `/sys/user/${id}`
   })
 }

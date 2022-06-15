@@ -2,13 +2,13 @@
  * 存储用户信息,token、个人信息
  */
 import { getToken, setToken, removeToken } from '@/utils/auth.js'
-import { loginAPI, getUserInfoAPI } from '@/api/user'
+import { loginAPI, getUserInfoAPI, getUserDetailByIdAPI } from '@/api/user'
 export default {
   // 模块化加锁
   namespaced: true,
   // 1.定义变量
   state: {
-    token: getToken() || ' ',
+    token: getToken() || '',
     // 用户信息
     userInfo: {}
   },
@@ -37,18 +37,18 @@ export default {
   },
   // 3.调用后台接口发送请求（异步）
   actions: {
-    // 登录
+    // 调用登录接口
     async loginAction(ctx, loginForm) {
       const token = await loginAPI(loginForm)
       console.log('获取到的token：', token)
       ctx.commit('setToken', token)
     },
-    // 获取用户数据
-    // 获取用户资料action
     async getUserInfoAction(res) {
+      // 获取用户个人信息，但没有头像
       const userInfo = await getUserInfoAPI()
-      console.log('获取用户的个人信息', userInfo)
-      res.commit('setUserInfo', userInfo)
+      // 获取用户个人信息的头像
+      const baseInfo = await getUserDetailByIdAPI(userInfo.userId)
+      res.commit('setUserInfo', { ...userInfo, ...baseInfo })
     }
   }
 }

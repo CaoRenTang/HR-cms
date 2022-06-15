@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <!--    <div class="dashboard-text">name: {{ name }}</div>-->
     <div class="title">标题Scss样式</div>
     <div class="box">
       <p>我是段落文字</p>

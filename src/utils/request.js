@@ -35,7 +35,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     // 后台返回的数据
-    console.log('后台返回的数据:', response.data)
+    // console.log('后台返回的数据:', response.data)
     // 状态码2xx 走到这里
     const { success, message, data } = response.data
     if (success) {
@@ -48,7 +48,7 @@ service.interceptors.response.use(
   },
   error => {
     // 状态码2xx以外 走到这里
-    console.log('err' + error) // for debug
+    // console.log('err' + error) // for debug
     // 场景：如果token失效了，状态码 401，删除token重新登录
     Message({
       message: error.message,

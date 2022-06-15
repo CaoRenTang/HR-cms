@@ -25,6 +25,7 @@
               项目地址
             </el-dropdown-item>
           </a>
+          <!--点击退出登录-->
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
           </el-dropdown-item>
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+// 映射vuex的数据
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 
@@ -53,9 +55,18 @@ export default {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
     },
+    // 点击事件->弹出确认框，确认后退出系统清空token
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      // 退出提示框
+      this.$confirm('确认退出登录吗？', '提示').then(() => {
+        // 确认,调用vuex中定义的退出登录的方法
+        this.$store.dispatch('user/logoutAction')
+        // 跳转到登录页面
+        this.$router.push('/login')
+      }).catch(() => {
+        // 取消
+        console.log(222)
+      })
     }
   }
 }

@@ -127,7 +127,7 @@ export default {
     handleLogin() {
       // 兜底校验
       this.$refs.loginForm.validate(async valid => {
-        console.log('兜底校验：', valid)
+        // console.log('兜底校验：', valid)
         if (valid) {
           // -----------------写法1：
           // const token = await loginAPI(this.loginForm)

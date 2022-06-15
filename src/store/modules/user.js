@@ -40,15 +40,23 @@ export default {
     // 调用登录接口
     async loginAction(ctx, loginForm) {
       const token = await loginAPI(loginForm)
-      console.log('获取到的token：', token)
+      // console.log('获取到的token：', token)
       ctx.commit('setToken', token)
     },
+    // 用户信息
     async getUserInfoAction(res) {
       // 获取用户个人信息，但没有头像
       const userInfo = await getUserInfoAPI()
       // 获取用户个人信息的头像
       const baseInfo = await getUserDetailByIdAPI(userInfo.userId)
       res.commit('setUserInfo', { ...userInfo, ...baseInfo })
+    },
+    // 退出登录
+    logoutAction({ commit }) {
+      // 删除token
+      commit('delToken')
+      // 删除用户信息
+      commit('delUserInfo')
     }
   }
 }

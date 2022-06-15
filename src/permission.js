@@ -20,8 +20,11 @@ router.beforeEach((to, from, next) => {
       next('/')
     } else {
       // 不是登录页，放行,调用后台接口获取数据方法
-      store.dispatch('user/getUserInfoAction')
       next()
+      // 通过判断避免切换页面重复发请求
+      if (!store.getters.name) {
+        store.dispatch('user/getUserInfoAction')
+      }
     }
   } else {
     // 没有token，是否在白名单

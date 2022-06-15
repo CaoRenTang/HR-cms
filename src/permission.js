@@ -4,9 +4,15 @@ import router from '@/router'
 import store from '@/store'
 // 添加白名单
 const VIP = ['/login', '/404']
+// 引入一份进度条插件
+import NProgress from 'nprogress'
+// 引入进度条样式
+import 'nprogress/nprogress.css'
 // 添加路由前置守卫
 router.beforeEach((to, from, next) => {
-// 有token
+  // 开启滚动条
+  NProgress.start()
+  // 有token
   if (store.getters.token) {
     // 是登录页
     if (to.path === '/login') {
@@ -26,4 +32,6 @@ router.beforeEach((to, from, next) => {
       next('/login')
     }
   }
+  // 关闭进度条
+  NProgress.done()
 })

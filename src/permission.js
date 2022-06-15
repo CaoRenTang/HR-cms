@@ -19,7 +19,8 @@ router.beforeEach((to, from, next) => {
       // 避免重复登录
       next('/')
     } else {
-      // 不是登录页，放行
+      // 不是登录页，放行,调用后台接口获取数据方法
+      store.dispatch('user/getUserInfoAction')
       next()
     }
   } else {

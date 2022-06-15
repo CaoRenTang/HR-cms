@@ -15,8 +15,11 @@ const service = axios.create({
 // 1. 请求拦截器=》发请求之前执行
 service.interceptors.request.use(
   config => {
+    // config 是请求配置项，其中包含headers
+    console.log('store实例', store)
     if (store.getters.token) {
       // 场景：统一添加请求头=》把token加入到请求中
+      config.headers.Authorization = `Bearer ${store.getters.token}`
     }
     return config
   },

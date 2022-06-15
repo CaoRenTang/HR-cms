@@ -3,6 +3,8 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 // 导入vuex实例
 import store from '@/store'
+// 导入路由实例
+import router from '@/router'
 // import { getToken } from '@/utils/auth'
 
 // 通过axios.create方法创建了一个新axios实例并配置后台基础地址
@@ -50,11 +52,14 @@ service.interceptors.response.use(
     // 状态码2xx以外 走到这里
     // console.log('err' + error) // for debug
     // 场景：如果token失效了，状态码 401，删除token重新登录
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    })
+    console.dir(error) // for debug
+    if (error.response.status === 401) {
+      // 删除用户信息
+      store.dispatch('user/logoutAction')
+      Message.error(error.response.data.message)
+      // 返回等了页面
+      router.replace('/login')
+    }
     return Promise.reject(error)
   }
 )

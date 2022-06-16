@@ -23,7 +23,14 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 // 定义一个全局指令，所有页面都可以使用
-Vue.directive('bordered', directives.borderOpt)
+// Vue.directive('bordered', directives.border)
+// Vue.directive('imagError', directives.imgError)
+// 批量注册
+Object.keys(directives).forEach((key) => {
+  console.log('指令名：', key, directives[key])
+  // 注册自定义指令
+  Vue.directive(key, directives[key])
+})
 new Vue({
   el: '#app',
   router,

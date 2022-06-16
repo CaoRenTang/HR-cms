@@ -3,9 +3,9 @@
     <!--    <div class="dashboard-text">name: {{ name }}</div>-->
     <div class="title">标题Scss样式</div>
     <div class="box">
-      <p v-bordered>我是段落文字</p>
+      <p v-border>我是段落文字</p>
     </div>
-    <ul v-bordered="color" class="menu">
+    <ul v-border="color" class="menu">
       <li><a href="">首页</a></li>
       <li><a href="">我的</a></li>
     </ul>
@@ -14,7 +14,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { green } from 'mockjs/src/mock/random/color_dict'
 
 export default {
   name: 'Dashboard',

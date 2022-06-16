@@ -10,7 +10,7 @@
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar" class="user-avatar">
+          <img v-imgError="defImg" :src="avatar" class="user-avatar">
           <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" style="color:#fff" />
         </div>
@@ -39,10 +39,17 @@
 // 映射vuex的数据
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
+// 导入默认头像图片
+import defImg from '@/assets/common/bigUserHeader.png'
 
 export default {
   components: {
     Hamburger
+  },
+  data() {
+    return {
+      defImg
+    }
   },
   computed: {
     ...mapGetters([

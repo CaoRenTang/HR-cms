@@ -107,7 +107,7 @@ export default {
   watch: {
     $route: {
       handler: function(route) {
-        this.redirect = route.query && route.query.redirect
+        this.redirect = route.query && route.query.backUrl
       },
       immediate: true
     }
@@ -140,7 +140,7 @@ export default {
           // 调用actions里的方法
           await this.$store.dispatch('user/loginAction', this.loginForm)
           // 跳转到首页
-          this.$router.push('/')
+          this.$router.push(this.redirect || '/')
         } else {
           console.log('error submit!!')
           return false

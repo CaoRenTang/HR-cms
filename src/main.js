@@ -15,7 +15,7 @@ import router from './router'
 import '@/icons' // icon
 import '@/permission' // permission control
 // 导入模块所有的变量名
-import * as directives from '@/directives'
+import * as directives from '@/directive'
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明

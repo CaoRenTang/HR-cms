@@ -58,7 +58,7 @@ service.interceptors.response.use(
       store.dispatch('user/logoutAction')
       Message.error(error.response.data.message)
       // 返回等了页面
-      router.replace('/login')
+      router.replace(`/login?backUrl=${router.currentRoute.path}`)
     }
     return Promise.reject(error)
   }

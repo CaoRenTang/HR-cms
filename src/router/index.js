@@ -12,18 +12,25 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 // 动态路由：需要做权限控制的路由，用户如果权限不一致访问到的路由也不一样
+// 导入动态路由配置
+// 引入多个动态路由模块
+import approvalsRouter from './modules/approvals'
+import departmentsRouter from './modules/departments'
+import employeesRouter from './modules/employees'
+import permissionRouter from './modules/permission'
+import attendancesRouter from './modules/attendances'
+import salarysRouter from './modules/salarys'
+import settingRouter from './modules/setting'
+import socialRouter from './modules/social'
 export const asyncRoutes = [
-  {
-    path: '/employees',
-    component: Layout,
-    children: [{
-      // 员工管理子页面
-      path: '',
-      component: () => import('@/views/employees'),
-      meta: { title: '员工管理', icon: 'dashboard' }
-    }]
-
-  }
+  approvalsRouter,
+  departmentsRouter,
+  employeesRouter,
+  permissionRouter,
+  attendancesRouter,
+  salarysRouter,
+  settingRouter,
+  socialRouter
 
 ]
 // 静态路由：不需要做权限控制的路由，每个用户都可以正常访问

@@ -14,14 +14,16 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+// 导入模块所有的变量名
+import * as directives from '@/directives'
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false
-
+// 定义一个全局指令，所有页面都可以使用
+Vue.directive('bordered', directives.borderOpt)
 new Vue({
   el: '#app',
   router,

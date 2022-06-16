@@ -12,7 +12,20 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 // 动态路由：需要做权限控制的路由，用户如果权限不一致访问到的路由也不一样
-export const asyncRoutes = []
+export const asyncRoutes = [
+  {
+    path: '/employees',
+    component: Layout,
+    children: [{
+      // 员工管理子页面
+      path: '',
+      component: () => import('@/views/employees'),
+      meta: { title: '员工管理', icon: 'dashboard' }
+    }]
+
+  }
+
+]
 // 静态路由：不需要做权限控制的路由，每个用户都可以正常访问
 export const constantRoutes = [
   {

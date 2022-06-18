@@ -66,6 +66,7 @@
       <add-dept
         :show-dialog="showDialog"
         :parent-node="parentNode"
+        :all-list="allList"
         @get-department="hGetDepartments"
         @close-dialog="closeDialog"
       />
@@ -89,6 +90,7 @@ export default {
   data() {
     return {
       parentNode: null, // 保存顶级部门
+      allList: [], // 没有转换的树形解构
       treeData: [], // 保存后台获取的树形控件数据
       company: '', // 定义变量，保存后台返回的公司名称
       // 后端返回的字段名不一致时修改
@@ -113,6 +115,8 @@ export default {
       this.treeData = res.depts
       this.company = res.companyName
       // console.log(this.treeData)
+      this.allList = res.depts
+      // console.table(this.allList)
       // 转换树形数据
       this.treeData = listToTreeData(res.depts)
     },

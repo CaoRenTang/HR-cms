@@ -47,9 +47,23 @@ export default {
       default() {
         return {}
       }
+    },
+    allList: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   data() {
+    // 自定义函数校验
+    const validateCode = (rule, value, callback) => {
+      if (this.allList.some(item => item.code === value)) {
+        callback(new Error('当前code码重复'))
+      } else {
+        callback()
+      }
+    }
     return {
       // 部门负责人列表数据
       messages: [],
@@ -68,7 +82,8 @@ export default {
         ],
         code: [
           { required: true, message: '部门编码不能为空', trigger: ['blur', 'change'] },
-          { min: 1, max: 50, message: '部门编码要求1-50个字符', trigger: ['blur', 'change'] }
+          { min: 1, max: 50, message: '部门编码要求1-50个字符', trigger: ['blur', 'change'] },
+          { validator: validateCode, trigger: 'blur' }
         ],
         manager: [
           { required: true, message: '部门负责人不能为空', trigger: ['blur', 'change'] }
@@ -90,6 +105,15 @@ export default {
     close() {
       // 修改父组件变量的值，子传父
       this.$emit('close-dialog', this.showDialog)
+      // 说明：手动清除表单数据为后期编辑作准备
+      this.formData = {
+        name: '', // 部门名称
+        code: '', // 部门编码
+        manager: '', // 部门管理者
+        introduce: '' // 部门介绍
+      }
+      // 清空form表单内容
+      this.$refs.deptForm.resetFields()
     },
     // 调用获取部门负责人接口
     async getPrincipal() {
@@ -111,8 +135,6 @@ export default {
           this.$emit('close-dialog')
           // 重新获取部门数据
           this.$emit('get-department')
-          // 清空form表单内容
-          this.$refs.deptForm.resetFields()
         }
       })
     }

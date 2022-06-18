@@ -33,7 +33,7 @@
 </template>
 <script>
 import { getEmployeeSimpleAPI } from '@/api/employees'
-import { addDepartmentsAPI, getDepartDetailAPI, updateDepartmentsAPI } from '@/api/departments'
+import { addDepartmentsAPI, getDepartDetailAPI } from '@/api/departments'
 export default {
   name: 'AddDept',
   props: {

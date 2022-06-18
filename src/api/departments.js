@@ -41,3 +41,13 @@ export const addDepartmentsAPI = (data) => {
     data
   })
 }
+/**
+ * @description: 获取部门详情
+ * @param {*} id 表示当前要编辑项的id值
+ * @return {*}
+ */
+export function getDepartDetailAPI(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}

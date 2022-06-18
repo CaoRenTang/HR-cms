@@ -33,7 +33,8 @@
 </template>
 <script>
 import { getEmployeeSimpleAPI } from '@/api/employees'
-import { addDepartmentsAPI } from '@/api/departments'
+import { addDepartmentsAPI, getDepartDetailAPI } from '@/api/departments'
+import async from 'async'
 export default {
   name: 'AddDept',
   props: {
@@ -137,6 +138,14 @@ export default {
           this.$emit('get-department')
         }
       })
+    },
+    // 编辑部门数据回显
+    async hGetDepartDetail(id) {
+      // 调用后台接口数据方法
+      const data = await getDepartDetailAPI(id)
+      // console.log(data)
+      // 将数据显示到表单页面中（数据回显）
+      this.formData = data
     }
 
   }

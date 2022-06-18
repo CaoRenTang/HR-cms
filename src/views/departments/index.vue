@@ -51,7 +51,7 @@
                     <el-dropdown-menu slot="dropdown">
                       <!--添加一级部门下的子孙部门-->
                       <el-dropdown-item @click.native="addDialog(data)">添加子部门</el-dropdown-item>
-                      <el-dropdown-item>编辑部门</el-dropdown-item>
+                      <el-dropdown-item @click.native="editDepart(data)">编辑部门</el-dropdown-item>
                       <!--.native事件穿透-->
                       <el-dropdown-item @click.native="delPart(data)">删除部门</el-dropdown-item>
                     </el-dropdown-menu>
@@ -64,6 +64,7 @@
       </el-tree>
       <!--      新增部门弹层组件-->
       <add-dept
+        ref="addDepart"
         :show-dialog="showDialog"
         :parent-node="parentNode"
         :all-list="allList"
@@ -141,11 +142,21 @@ export default {
         console.log(error)
       })
     },
-    // 新增部门
+    // 点击事件-> 新增部门
     addDialog(parentNode) {
       this.showDialog = true
       // console.log(parentNode)
       this.parentNode = parentNode
+    },
+    // 点击事件->编辑部门
+    editDepart(data) {
+      // console.log(data)
+      // 1.打开弹框
+      this.showDialog = true
+      // 2.记录一下当前点击的是谁 也就是要编辑谁
+      this.parentNode = data
+      // 3.通知子组件调用获取详情接口进行回显操作
+      this.$refs.addDepart.hGetDepartDetail(data.id)
     },
     // 关闭子组件的弹出框
     closeDialog() {

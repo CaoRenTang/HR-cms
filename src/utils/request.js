@@ -41,10 +41,10 @@ service.interceptors.response.use(
     // 状态码2xx 走到这里
     const { success, message, data } = response.data
     if (success) {
-      Message.success(message)
+      // Message.success(message)
       return data
     } else {
-      Message.error(message)
+      // Message.error(message)
       return Promise.reject(new Error(message))
     }
   },

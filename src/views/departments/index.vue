@@ -15,7 +15,8 @@
                 <el-dropdown>
                   <span> 操作<i class="el-icon-arrow-down" /> </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item @click.native="addDialog">添加子部门</el-dropdown-item>
+                    <!--  addDialog函数需要传递null，否则将传递事件对象                  -->
+                    <el-dropdown-item @click.native="addDialog(null)">添加子部门</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </el-col>
@@ -48,7 +49,8 @@
                     <span> 操作<i class="el-icon-arrow-down" /> </span>
                     <!-- 下拉菜单 -->
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>添加子部门</el-dropdown-item>
+                      <!--添加一级部门下的子孙部门-->
+                      <el-dropdown-item @click.native="addDialog(data)">添加子部门</el-dropdown-item>
                       <el-dropdown-item>编辑部门</el-dropdown-item>
                       <!--.native事件穿透-->
                       <el-dropdown-item @click.native="delPart(data)">删除部门</el-dropdown-item>
@@ -81,6 +83,7 @@ export default {
   },
   data() {
     return {
+      parentNode: null, // 保存顶级部门
       treeData: [], // 保存后台获取的树形控件数据
       company: '', // 定义变量，保存后台返回的公司名称
       // 后端返回的字段名不一致时修改
@@ -130,8 +133,10 @@ export default {
       })
     },
     // 新增部门
-    addDialog() {
+    addDialog(parentNode) {
       this.showDialog = true
+      console.log(parentNode)
+      this.parentNode = parentNode
     },
     // 关闭子组件的弹出框
     closeDialog() {

@@ -12,7 +12,14 @@
         <el-input v-model="formData.code" style="width:80%" placeholder="1-50个字符" />
       </el-form-item>
       <el-form-item label="部门负责人" prop="manager">
-        <el-select v-model="formData.manager" style="width:80%" placeholder="请选择" value="" />
+        <el-select v-model="formData.manager" style="width:80%" placeholder="请选择">
+          <el-option
+            v-for="item in messages"
+            :key="item.id"
+            :label="item.username"
+            :value="item.username"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="部门介绍" prop="introduce">
         <el-input v-model="formData.introduce" style="width:80%" placeholder="1-300个字符" type="textarea" :rows="3" />
@@ -25,6 +32,7 @@
   </el-dialog>
 </template>
 <script>
+import { getEmployeeSimpleAPI } from '@/api/employees'
 export default {
   name: 'AddDept',
   props: {
@@ -36,6 +44,8 @@ export default {
   },
   data() {
     return {
+      // 部门负责人列表数据
+      messages: [],
       // 表单数据->和后台参数名一致
       formData: {
         name: '', // 部门名称
@@ -63,11 +73,23 @@ export default {
       }
     }
   },
+  created() {
+    // 调用获取部门负责人方法
+    this.getPrincipal()
+  },
   methods: {
+    // 子传父新增
     close() {
       // 修改父组件变量的值，子传父
       this.$emit('close-dialog', this.showDialog)
+    },
+    // 调用获取部门负责人接口
+    async getPrincipal() {
+      const data = await getEmployeeSimpleAPI()
+      // console.log(data)
+      this.messages = data
     }
+
   }
 }
 </script>

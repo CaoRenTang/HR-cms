@@ -15,7 +15,7 @@
                 <el-dropdown>
                   <span> 操作<i class="el-icon-arrow-down" /> </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>添加子部门</el-dropdown-item>
+                    <el-dropdown-item @click.native="addDialog">添加子部门</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </el-col>
@@ -60,6 +60,8 @@
           </el-row>
         </template>
       </el-tree>
+      <!--      新增部门弹层组件-->
+      <add-dept :show-dialog="showDialog" @close-dialog="closeDialog" />
     </el-card>
   </div>
 </template>
@@ -69,8 +71,14 @@
 import { getDepartmentsAPI, delDepartmentsAPI } from '@/api/departments'
 // 导入转换树形数据的方法
 import { listToTreeData } from '@/utils/index.js'
+// 引入新增组件
+import AddDept from './components/add-dept'
 export default {
   name: 'Departments',
+  // 注册组件
+  components: {
+    AddDept
+  },
   data() {
     return {
       treeData: [], // 保存后台获取的树形控件数据
@@ -80,7 +88,9 @@ export default {
         children: 'children',
         // 后端返回的组织架构名字为name
         label: 'name'
-      }
+      },
+      // 控制新增窗口的显示隐藏
+      showDialog: false
     }
   },
   created() {
@@ -118,19 +128,14 @@ export default {
         // 取消
         console.log(error)
       })
-      // this.$confirm('你确认要进行删除么?', '温馨提示').then(async() => {
-      //   if (data.children && data.children.length) {
-      //     return this.$message.error('不能直接删除父节点！')
-      //   }
-      //   // 删除操作成功
-      //   await delDepartmentsAPI(data.id)
-      //   // 添加提示
-      //   this.$message.success('删除操作成功')
-      //   // 更新数据
-      //   this.hGetDepartments()
-      // }).catch(error => {
-      //   console.log(error)
-      // })
+    },
+    // 新增部门
+    addDialog() {
+      this.showDialog = true
+    },
+    // 关闭子组件的弹出框
+    closeDialog() {
+      this.showDialog = false
     }
   }
 }

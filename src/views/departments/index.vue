@@ -150,7 +150,6 @@ export default {
     },
     // 点击事件->编辑部门
     editDepart(data) {
-      // console.log(data)
       // 1.打开弹框
       this.showDialog = true
       // 2.记录一下当前点击的是谁 也就是要编辑谁

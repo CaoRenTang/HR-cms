@@ -26,15 +26,14 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button type="primary" size="small" @click.native="addDept">新增</el-button>
+      <el-button type="primary" size="small" @click.native="addDept">确定</el-button>
       <el-button size="small">取消</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import { getEmployeeSimpleAPI } from '@/api/employees'
-import { addDepartmentsAPI, getDepartDetailAPI } from '@/api/departments'
-import async from 'async'
+import { addDepartmentsAPI, getDepartDetailAPI, updateDepartmentsAPI } from '@/api/departments'
 export default {
   name: 'AddDept',
   props: {

@@ -4,7 +4,7 @@
       <div slot="header">
         <el-row>
           <el-col :span="20">
-            <span>江苏传智播客教育科技股份有限公司</span>
+            <span>{{ company }}</span>
           </el-col>
           <el-col :span="4">
             <el-row type="flex" justify="end">
@@ -24,12 +24,13 @@
         </el-row>
       </div>
       <!-- 树形组件-->
-      页面内容
+      <!-- props修改后台返回的字段名不一致时使用，不叫label和children     -->
       <el-tree
         :data="treeData"
         :props="defaultProps"
         :default-expand-all="true"
       >
+        <!-- #default默认插槽名，作用域插槽，拿到当前树形节点的数据，解构赋值-->
         <template #default="{ data }">
           <el-row
             style="width: 100%;"
@@ -63,30 +64,37 @@
 </template>
 
 <script>
+// 导入接口
 import { getDepartmentsAPI } from '@/api/departments'
+// 导入转换树形数据的方法
+import { listToTreeData } from '@/utils/index.js'
 export default {
   name: 'Departments',
   data() {
     return {
       treeData: [], // 保存后台获取的树形控件数据
-      company: { name: '' },
-      // 后端返回的字段名不一致时使用
+      company: '', // 定义变量，保存后台返回的公司名称
+      // 后端返回的字段名不一致时修改
       defaultProps: {
         children: 'children',
+        // 后端返回的组织架构名字为name
         label: 'name'
       }
     }
   },
-  mounted() {
+  created() {
     this.hGetDepartments()
   },
   methods: {
-    // 获取树形数据
+    // 获取组织架构部门树形数据
     async hGetDepartments() {
       const res = await getDepartmentsAPI()
       // console.log(res)
       this.treeData = res.depts
-      console.log(this.treeData)
+      this.company = res.companyName
+      // console.log(this.treeData)
+      // 转换树形数据
+      this.treeData = listToTreeData(res.depts)
     }
   }
 }

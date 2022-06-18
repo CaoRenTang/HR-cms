@@ -2,7 +2,7 @@
 // 1.给元素添加边框
 export const border = {
   inserted(dom, options) {
-    console.log('指令参数', dom, options)
+    // console.log('指令参数', dom, options)
     dom.style.border = `10px solid ${options.value || 'red'}`
   }
 }

@@ -1,6 +1,6 @@
 // 1.导入请求方法
 import request from '@/utils/request'
-
+// 用户相关的所有接口方法
 /**
  *@description:登录
  * @param data {mobile, password}

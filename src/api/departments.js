@@ -1,6 +1,5 @@
 // 1.导入请求方法
 import request from '@/utils/request'
-import { id } from 'html-webpack-plugin/lib/chunksorter'
 // 组织架构页面的所有接口
 
 /**
@@ -21,5 +20,24 @@ export const delDepartmentsAPI = (id) => {
   return request({
     url: `/company/department/${id}`,
     method: 'delete'
+  })
+}
+/**
+ * @description: 新增子部门
+ * @param {*}
+  data {
+            name: '', // 部门名称
+            code: '', // 部门编码
+            manager: '', // 部门管理者
+            introduce: '', // 部门介绍
+            pid: '' // 1. 顶级部门 =》传空  2. 子部门 =》传父部门的ID
+        }
+ * @return {*}
+ */
+export const addDepartmentsAPI = (data) => {
+  return request({
+    url: '/company/department',
+    method: 'post',
+    data
   })
 }

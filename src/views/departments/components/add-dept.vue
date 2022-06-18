@@ -4,7 +4,7 @@
     :visible="showDialog"
     @close="close"
   >
-    <el-form label-width="120px" :model="formData" :rules="rules">
+    <el-form ref="deptForm" label-width="120px" :model="formData" :rules="rules">
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="formData.name" style="width:80%" placeholder="1-50个字符" />
       </el-form-item>
@@ -26,13 +26,14 @@
       </el-form-item>
     </el-form>
     <div slot="footer">
-      <el-button type="primary" size="small">确定</el-button>
+      <el-button type="primary" size="small" @click.native="addDept">新增</el-button>
       <el-button size="small">取消</el-button>
     </div>
   </el-dialog>
 </template>
 <script>
 import { getEmployeeSimpleAPI } from '@/api/employees'
+import { addDepartmentsAPI } from '@/api/departments'
 export default {
   name: 'AddDept',
   props: {
@@ -40,6 +41,12 @@ export default {
     showDialog: {
       type: Boolean,
       default: false
+    },
+    parentNode: {
+      type: Object,
+      default() {
+        return {}
+      }
     }
   },
   data() {
@@ -73,6 +80,7 @@ export default {
       }
     }
   },
+  // 生命周期函数
   created() {
     // 调用获取部门负责人方法
     this.getPrincipal()
@@ -88,6 +96,25 @@ export default {
       const data = await getEmployeeSimpleAPI()
       // console.log(data)
       this.messages = data
+    },
+    // 新增部门
+    addDept() {
+    // 兜底检验
+      this.$refs.deptForm.validate(async(isOK) => {
+        if (isOK) {
+          // 校验通过，掉接口
+          const data = { ...this.formData, pid: this.parentNode?.id || '' }
+          await addDepartmentsAPI(data)
+          // 提示添加成功
+          this.$message.success('添加成功')
+          // 关闭弹层
+          this.$emit('close-dialog')
+          // 重新获取部门数据
+          this.$emit('get-department')
+          // 清空form表单内容
+          this.$refs.deptForm.resetFields()
+        }
+      })
     }
 
   }

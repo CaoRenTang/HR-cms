@@ -63,7 +63,12 @@
         </template>
       </el-tree>
       <!--      新增部门弹层组件-->
-      <add-dept :show-dialog="showDialog" @close-dialog="closeDialog" />
+      <add-dept
+        :show-dialog="showDialog"
+        :parent-node="parentNode"
+        @get-department="hGetDepartments"
+        @close-dialog="closeDialog"
+      />
     </el-card>
   </div>
 </template>
@@ -135,7 +140,7 @@ export default {
     // 新增部门
     addDialog(parentNode) {
       this.showDialog = true
-      console.log(parentNode)
+      // console.log(parentNode)
       this.parentNode = parentNode
     },
     // 关闭子组件的弹出框

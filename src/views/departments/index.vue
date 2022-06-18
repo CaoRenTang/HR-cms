@@ -50,7 +50,8 @@
                     <el-dropdown-menu slot="dropdown">
                       <el-dropdown-item>添加子部门</el-dropdown-item>
                       <el-dropdown-item>编辑部门</el-dropdown-item>
-                      <el-dropdown-item>删除部门</el-dropdown-item>
+                      <!--.native事件穿透-->
+                      <el-dropdown-item @click.native="delPart(data)">删除部门</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </el-col>
@@ -65,7 +66,7 @@
 
 <script>
 // 导入接口
-import { getDepartmentsAPI } from '@/api/departments'
+import { getDepartmentsAPI, delDepartmentsAPI } from '@/api/departments'
 // 导入转换树形数据的方法
 import { listToTreeData } from '@/utils/index.js'
 export default {
@@ -83,6 +84,7 @@ export default {
     }
   },
   created() {
+    // 调用获取列表数据方法
     this.hGetDepartments()
   },
   methods: {
@@ -95,6 +97,40 @@ export default {
       // console.log(this.treeData)
       // 转换树形数据
       this.treeData = listToTreeData(res.depts)
+    },
+    // 点击事件->删除部门数据
+    delPart(data) {
+      console.log(data)
+      // 提示用户删除信息
+      this.$confirm(`确认要删除:${data.name}`, '温馨提示').then(async() => {
+        // 确定
+        // 判断如果有子部门不能删除
+        if (data.children && data.children.length > 0) {
+          return this.$message.error('当前部门下有子部门，不能删除')
+        }
+        // 调用删除接口,删除操作成功
+        await delDepartmentsAPI(data.id)
+        // 删除成功提示
+        this.$message.success('删除部门成功')
+        // 刷新列表数据
+        await this.hGetDepartments()
+      }).catch(error => {
+        // 取消
+        console.log(error)
+      })
+      // this.$confirm('你确认要进行删除么?', '温馨提示').then(async() => {
+      //   if (data.children && data.children.length) {
+      //     return this.$message.error('不能直接删除父节点！')
+      //   }
+      //   // 删除操作成功
+      //   await delDepartmentsAPI(data.id)
+      //   // 添加提示
+      //   this.$message.success('删除操作成功')
+      //   // 更新数据
+      //   this.hGetDepartments()
+      // }).catch(error => {
+      //   console.log(error)
+      // })
     }
   }
 }

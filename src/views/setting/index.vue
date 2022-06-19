@@ -24,7 +24,7 @@
               <el-table-column label="操作">
                 <template #default="{row}">
                   <el-button size="small" type="success">分配权限</el-button>
-                  <el-button size="small" type="primary">编辑</el-button>
+                  <el-button size="small" type="primary" @click="editFn(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="deleteRole(row)">删除</el-button>
                 </template>
               </el-table-column>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { getRoleListAPI, addRoleAPI, deleteRoleAPI } from '@/api/setting'
+import { getRoleListAPI, addRoleAPI, deleteRoleAPI, getRoleDetailAPI, updateRoleAPI } from '@/api/setting'
 export default {
   name: 'Setting',
   data() {
@@ -144,8 +144,8 @@ export default {
     },
     // 点击事件->删除
     deleteRole(row) {
-      console.log(row)
-      this.$confirm(`此操作将永久删除${row.name}, 是否继续?`, '提示', { type: 'warning' }).then(() => {
+      // console.log(row)
+      this.$confirm(`此操作将删除角色:${row.name}, 是否继续?`, '提示', { type: 'warning' }).then(() => {
         // 调用删除接口
         deleteRoleAPI(row.id).then(res => {
           this.getRoleList()
@@ -157,8 +157,18 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    // 点击事件->编辑
+    async editFn(row) {
+      console.log('要编辑的数据:', row)
+      // 点击编辑，让弹出层显示
+      this.showDialog = true
+      // 调用编辑角色的接口方法
+      const res = await getRoleDetailAPI(row.id)
+      console.log(res)
+      // 将数据回显
+      this.roleForm = res
     }
-
   }
 
 }

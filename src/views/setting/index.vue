@@ -22,9 +22,11 @@
               <el-table-column label="角色名称" width="240" prop="name" />
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
-                <el-button size="small" type="success">分配权限</el-button>
-                <el-button size="small" type="primary">编辑</el-button>
-                <el-button size="small" type="danger">删除</el-button>
+                <template #default="{row}">
+                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="primary">编辑</el-button>
+                  <el-button size="small" type="danger" @click="deleteRole(row)">删除</el-button>
+                </template>
               </el-table-column>
             </el-table>
             <!-- 分页组件 -->
@@ -73,7 +75,7 @@
 </template>
 
 <script>
-import { getRoleListAPI, addRoleAPI } from '@/api/setting'
+import { getRoleListAPI, addRoleAPI, deleteRoleAPI } from '@/api/setting'
 export default {
   name: 'Setting',
   data() {
@@ -132,7 +134,29 @@ export default {
     },
     // 关闭弹层执行
     closeDialog() {
-
+      // 重置表单
+      this.$refs.roleForm.resetFields()
+      // 手动清空数据(编辑时使用)
+      this.roleForm = {
+        name: '',
+        description: ''
+      }
+    },
+    // 点击事件->删除
+    deleteRole(row) {
+      console.log(row)
+      this.$confirm(`此操作将永久删除${row.name}, 是否继续?`, '提示', { type: 'warning' }).then(() => {
+        // 调用删除接口
+        deleteRoleAPI(row.id).then(res => {
+          this.getRoleList()
+          this.$message.success('删除角色成功')
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
 
   }

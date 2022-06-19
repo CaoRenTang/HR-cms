@@ -23,3 +23,14 @@ export const addRoleAPI = (data) => {
     method: 'post'
   })
 }
+/**
+ * @description: 删除角色
+ * @param {*} id 角色id
+ * @return {*}
+ */
+export const deleteRoleAPI = (id) => {
+  return request({
+    url: `/sys/role/${id}`,
+    method: 'delete'
+  })
+}

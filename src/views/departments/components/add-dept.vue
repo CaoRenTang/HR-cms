@@ -31,7 +31,7 @@
     </el-form>
     <div slot="footer">
       <el-button type="primary" size="small" @click.native="addDept">确定</el-button>
-      <el-button size="small">取消</el-button>
+      <el-button size="small" @click="showDialog = false">取消</el-button>
     </div>
   </el-dialog>
 </template>
@@ -62,7 +62,14 @@ export default {
   data() {
     // 自定义函数校验
     const validateCode = (rule, value, callback) => {
-      if (this.allList.some(item => item.code === value)) {
+      // 编辑情况下排除自身
+      let flag
+      if (this.formData.id) {
+        flag = this.allList.some(item => item.code === value && value !== this.parentNode.code)
+      } else {
+        flag = this.allList.some(item => item.code === value)
+      }
+      if (flag) {
         callback(new Error('当前code码重复'))
       } else {
         callback()

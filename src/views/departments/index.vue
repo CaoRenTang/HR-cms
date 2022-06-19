@@ -50,8 +50,8 @@
                     <!-- 下拉菜单 -->
                     <el-dropdown-menu slot="dropdown">
                       <!--添加一级部门下的子孙部门-->
-                      <el-dropdown-item @click.native="addDialog(data)">添加子部门</el-dropdown-item>
-                      <el-dropdown-item @click.native="editDepart(data)">编辑部门</el-dropdown-item>
+                      <el-dropdown-item @click.native="addDialog(data,1)">添加子部门</el-dropdown-item>
+                      <el-dropdown-item @click.native="addDialog(data,2)">编辑部门</el-dropdown-item>
                       <!--.native事件穿透-->
                       <el-dropdown-item @click.native="delPart(data)">删除部门</el-dropdown-item>
                     </el-dropdown-menu>
@@ -63,11 +63,13 @@
         </template>
       </el-tree>
       <!--      新增部门弹层组件-->
+      <!--      ref用来调取子组件的方法-->
       <add-dept
         ref="addDepart"
         :show-dialog="showDialog"
         :parent-node="parentNode"
         :all-list="allList"
+        :title="title"
         @get-department="hGetDepartments"
         @close-dialog="closeDialog"
       />
@@ -90,6 +92,7 @@ export default {
   },
   data() {
     return {
+      title: '', // 新增编辑头部
       parentNode: null, // 保存顶级部门
       allList: [], // 没有转换的树形解构
       treeData: [], // 保存后台获取的树形控件数据
@@ -143,19 +146,18 @@ export default {
       })
     },
     // 点击事件-> 新增部门
-    addDialog(parentNode) {
+    // type标识 1为新增，2为编辑
+    addDialog(parentNode, type) {
+      // 新增
       this.showDialog = true
-      // console.log(parentNode)
+      this.title = '新增部门'
       this.parentNode = parentNode
-    },
-    // 点击事件->编辑部门
-    editDepart(data) {
-      // 1.打开弹框
-      this.showDialog = true
-      // 2.记录一下当前点击的是谁 也就是要编辑谁
-      this.parentNode = data
-      // 3.通知子组件调用获取详情接口进行回显操作
-      this.$refs.addDepart.hGetDepartDetail(data.id)
+
+      if (type === 2) {
+        // 编辑
+        this.title = '编辑部门'
+        this.$refs.addDepart.hGetDepartDetail(parentNode.id)
+      }
     },
     // 关闭子组件的弹出框
     closeDialog() {

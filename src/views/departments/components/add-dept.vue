@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="新增部门"
+    :title="title"
     :visible="showDialog"
     @close="close"
   >
@@ -53,6 +53,9 @@ export default {
       default() {
         return []
       }
+    },
+    title: {
+      type: String
     }
   },
   data() {

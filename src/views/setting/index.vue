@@ -12,14 +12,15 @@
                 size="small"
                 type="primary"
                 @click="showDialog=true"
-              >新增角色</el-button>
+              >新增角色
+              </el-button>
             </el-row>
             <!-- 表格 -->
             <el-table
               :data="roleList"
             >
-              <el-table-column label="序号" width="120" type="index" />
-              <el-table-column label="角色名称" width="240" prop="name" />
+              <el-table-column label="序号" type="index" width="120" />
+              <el-table-column label="角色名称" prop="name" width="240" />
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template #default="{row}">
@@ -30,13 +31,13 @@
               </el-table-column>
             </el-table>
             <!-- 分页组件 -->
-            <el-row type="flex" justify="center" align="middle" style="height: 60px">
+            <el-row align="middle" justify="center" style="height: 60px" type="flex">
               <!-- 分页组件 -->
               <el-pagination
-                layout="prev,pager,next"
                 :current-page="page.page"
                 :page-size="page.pagesize"
                 :total="page.total"
+                layout="prev,pager,next"
                 @current-change="changePage"
               />
             </el-row>
@@ -45,7 +46,7 @@
       </el-card>
       <!--        新增弹层-->
       <el-dialog
-        title="新增角色"
+        :title="roleForm.id ? '编辑角色' :'新增角色'"
         :visible.sync="showDialog"
         @close="closeDialog"
       >
@@ -63,7 +64,7 @@
           </el-form-item>
         </el-form>
         <!-- 底部 -->
-        <el-row slot="footer" type="flex" justify="center">
+        <el-row slot="footer" justify="center" type="flex">
           <el-col :span="6">
             <el-button size="small" @click="showDialog=false">取消</el-button>
             <el-button size="small" type="primary" @click="btnOK">确定</el-button>
@@ -76,6 +77,7 @@
 
 <script>
 import { getRoleListAPI, addRoleAPI, deleteRoleAPI, getRoleDetailAPI, updateRoleAPI } from '@/api/setting'
+
 export default {
   name: 'Setting',
   data() {
@@ -123,8 +125,16 @@ export default {
       // 兜底校验->通过之后调用后台接口数据->提示添加成功->关闭弹层->刷新列表数据
       this.$refs.roleForm.validate(async(isOK) => {
         if (isOK) {
-          await addRoleAPI(this.roleForm)
-          this.$message.success('添加成功')
+          if (this.roleForm.id) {
+            // 有ID为编辑,调用接口接口更新表单数据
+            await updateRoleAPI(this.roleForm)
+            // 修改成功提示
+            this.$message.success('修改角色信息成功')
+          } else {
+            // 没有ID为添加
+            await addRoleAPI(this.roleForm)
+            this.$message.success('添加成功')
+          }
           // 关闭弹层
           this.showDialog = false
           // 刷新列表数据
@@ -165,7 +175,7 @@ export default {
       this.showDialog = true
       // 调用编辑角色的接口方法
       const res = await getRoleDetailAPI(row.id)
-      console.log(res)
+      // console.log(res)
       // 将数据回显
       this.roleForm = res
     }

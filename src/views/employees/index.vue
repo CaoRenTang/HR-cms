@@ -4,7 +4,7 @@
       <page-tools>
         <!-- 插入到left插槽位置 -->
         <template #left>
-          <span>本月: 社保在缴 公积金在缴</span>
+          <span>总记录数：100</span>
         </template>
         <!-- 插入到right插槽位置 -->
         <template #right>

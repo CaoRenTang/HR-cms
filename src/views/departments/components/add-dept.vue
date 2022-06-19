@@ -37,7 +37,7 @@
 </template>
 <script>
 import { getEmployeeSimpleAPI } from '@/api/employees'
-import { addDepartmentsAPI, getDepartDetailAPI } from '@/api/departments'
+import { addDepartmentsAPI, getDepartDetailAPI, updateDepartmentsAPI } from '@/api/departments'
 export default {
   name: 'AddDept',
   props: {
@@ -116,7 +116,7 @@ export default {
     close() {
       // 修改父组件变量的值，子传父
       this.$emit('close-dialog', this.showDialog)
-      // 说明：手动清除表单数据为后期编辑作准备
+      // 说明：手动清除表单数据为后期编辑作准备，负责第二次打开添加还是显示编辑
       this.formData = {
         name: '', // 部门名称
         code: '', // 部门编码
@@ -132,16 +132,24 @@ export default {
       // console.log(data)
       this.messages = data
     },
-    // 新增部门
+    // 新增||编辑部门
     addDept() {
     // 兜底检验
       this.$refs.deptForm.validate(async(isOK) => {
         if (isOK) {
-          // 校验通过，掉接口
-          const data = { ...this.formData, pid: this.parentNode?.id || '' }
-          await addDepartmentsAPI(data)
-          // 提示添加成功
-          this.$message.success('添加成功')
+          // 有id为编辑，没有id为新增
+          if (this.formData.id) {
+            // 编辑
+            await updateDepartmentsAPI(this.formData)
+            this.$message.success('修改成功')
+          } else {
+            // 新增
+            // 校验通过，掉接口
+            const data = { ...this.formData, pid: this.parentNode?.id || '' }
+            await addDepartmentsAPI(data)
+            // 提示添加成功
+            this.$message.success('添加成功')
+          }
           // 关闭弹层
           this.$emit('close-dialog')
           // 重新获取部门数据

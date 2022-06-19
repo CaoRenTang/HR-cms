@@ -11,6 +11,7 @@
                 icon="el-icon-plus"
                 size="small"
                 type="primary"
+                @click="showDialog=true"
               >新增角色</el-button>
             </el-row>
             <!-- 表格 -->
@@ -40,12 +41,39 @@
           </el-tab-pane>
         </el-tabs>
       </el-card>
+      <!--        新增弹层-->
+      <el-dialog
+        title="新增角色"
+        :visible.sync="showDialog"
+        @close="closeDialog"
+      >
+        <el-form
+          ref="roleForm"
+          :model="roleForm"
+          :rules="rules"
+          label-width="100px"
+        >
+          <el-form-item label="角色名称" prop="name">
+            <el-input v-model="roleForm.name" />
+          </el-form-item>
+          <el-form-item label="角色描述" prop="description">
+            <el-input v-model="roleForm.description" />
+          </el-form-item>
+        </el-form>
+        <!-- 底部 -->
+        <el-row slot="footer" type="flex" justify="center">
+          <el-col :span="6">
+            <el-button size="small" @click="showDialog=false">取消</el-button>
+            <el-button size="small" type="primary" @click="btnOK">确定</el-button>
+          </el-col>
+        </el-row>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
-import { getRoleListAPI } from '@/api/setting'
+import { getRoleListAPI, addRoleAPI } from '@/api/setting'
 export default {
   name: 'Setting',
   data() {
@@ -56,7 +84,19 @@ export default {
         page: 1, // 当前页码数
         pagesize: 10, // 每一页显示的数量
         total: 0 // 记录总数
+      },
+      showDialog: false, // 默认隐藏弹层
+      roleForm: {
+        name: '',
+        description: ''
+      },
+      rules: {
+        name: [{ required: true, message: '角色名称不能为空', trigger: 'blur' }],
+        description: [
+          { required: true, message: '角色描述不能为空', trigger: 'blur' }
+        ]
       }
+
     }
   },
   created() {
@@ -75,7 +115,26 @@ export default {
     changePage(newPage) {
       this.page.page = newPage // 将当前页码赋值给当前的最新页码
       this.getRoleList()
+    },
+    // 点击事件，弹层点击确定提交
+    btnOK() {
+      // 兜底校验->通过之后调用后台接口数据->提示添加成功->关闭弹层->刷新列表数据
+      this.$refs.roleForm.validate(async(isOK) => {
+        if (isOK) {
+          await addRoleAPI(this.roleForm)
+          this.$message.success('添加成功')
+          // 关闭弹层
+          this.showDialog = false
+          // 刷新列表数据
+          this.getRoleList()
+        }
+      })
+    },
+    // 关闭弹层执行
+    closeDialog() {
+
     }
+
   }
 
 }

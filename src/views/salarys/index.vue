@@ -1,12 +1,12 @@
 <template>
-  <div>工资</div>
+  <div>
+    工资
+  </div>
 </template>
 
 <script>
-export default {
-
-}
+export default {}
 </script>
+<style scoped>
 
-<style lang="scss" scoped>
 </style>

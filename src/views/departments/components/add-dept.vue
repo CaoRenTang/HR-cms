@@ -1,6 +1,10 @@
 <template>
+  <!--
+新增没有ID
+编辑有ID
+-->
   <el-dialog
-    :title="title"
+    :title="formData.id ? '编辑部门' : '新增部门'"
     :visible="showDialog"
     @close="close"
   >
@@ -53,9 +57,6 @@ export default {
       default() {
         return []
       }
-    },
-    title: {
-      type: String
     }
   },
   data() {

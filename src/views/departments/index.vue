@@ -69,7 +69,6 @@
         :show-dialog="showDialog"
         :parent-node="parentNode"
         :all-list="allList"
-        :title="title"
         @get-department="hGetDepartments"
         @close-dialog="closeDialog"
       />
@@ -92,7 +91,6 @@ export default {
   },
   data() {
     return {
-      title: '', // 新增编辑头部
       parentNode: null, // 保存顶级部门
       allList: [], // 没有转换的树形解构
       treeData: [], // 保存后台获取的树形控件数据
@@ -150,12 +148,10 @@ export default {
     addDialog(parentNode, type) {
       // 新增
       this.showDialog = true
-      this.title = '新增部门'
       this.parentNode = parentNode
 
       if (type === 2) {
         // 编辑
-        this.title = '编辑部门'
         this.$refs.addDepart.hGetDepartDetail(parentNode.id)
       }
     },

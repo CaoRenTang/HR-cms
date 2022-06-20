@@ -12,7 +12,7 @@
             <template #right>
               <el-button size="small" type="warning">导入excel</el-button>
               <el-button size="small" type="danger">导出excel</el-button>
-              <el-button size="small" type="primary">新增员工</el-button>
+              <el-button size="small" type="primary" @click="addEmployeeFn">新增员工</el-button>
             </template>
           </PageTools>
         </div>
@@ -59,15 +59,23 @@
           </el-row>
         </div>
       </el-card>
+      <add-employee
+        :show-dialog="showDialog"
+        @close-dialog="closeDialog"
+      />
+
     </div>
   </div>
 </template>
 
 <script>
-import { getEmployeeListAPI } from '@/api/employees'
+import {getEmployeeListAPI} from '@/api/employees'
+import addEmployee from './components/add-employee'
 
 export default {
-  components: {},
+  components: {
+    addEmployee
+  },
   data() {
     return {
       list: [], // 保存后台获取的员工信息
@@ -75,7 +83,8 @@ export default {
         page: 1, // 当前页
         size: 10 // 每页条数
       },
-      total: 0 // 总数
+      total: 0, // 总数
+      showDialog: false // 控制弹层的显示隐藏
     }
   },
   created() {
@@ -99,11 +108,19 @@ export default {
     sizeChange(newSize) {
       this.params.size = newSize
       this.getEmployeeList()
-    }
+    },
     // 转换时间的函数方法
     // formatDate(value, str = 'YYYY-MM-DD') {
     //   return dayjs(value).format(str)
-    // }
+    // },
+    // 新增员工点击按钮
+    addEmployeeFn() {
+      this.showDialog = true
+    },
+    // 关闭弹层自定义事件
+    closeDialog() {
+      this.showDialog = false
+    }
   }
 }
 </script>

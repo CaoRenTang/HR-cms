@@ -22,6 +22,7 @@ import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
 import settingRouter from './modules/setting'
 import socialRouter from './modules/social'
+
 export const asyncRoutes = [
   departmentsRouter,
   settingRouter,
@@ -46,7 +47,16 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
+  // 员工批量导入
+  {
+    path: '/import',
+    component: Layout,
+    // hidden: true, // 不显示到左侧 不参与遍历
+    children: [{
+      path: '',
+      component: () => import('@/views/import')
+    }]
+  },
   {
     path: '/',
     component: Layout,
@@ -55,7 +65,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: {title: 'Dashboard', icon: 'dashboard'}
     }]
   },
 

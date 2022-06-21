@@ -65,7 +65,7 @@
             <el-pagination
               :current-page="params.page"
               :page-size="params.size"
-              :page-sizes="[10, 2]"
+              :page-sizes="[2,5,10]"
               :total="total"
               background
               layout="prev, pager, next,sizes"
@@ -164,6 +164,12 @@ export default {
         await delEmployeeAPI(row.id)
         // 提示删除成功
         this.$message.success('删除成功')
+        // 解决删除最后一页面显示无数据bug
+        if (this.list.length === 1) {
+          if (this.params.page > 1) {
+            this.params.page--
+          }
+        }
         // 重新获取列表数据
         await this.getEmployeeList()
       }).catch(error => {

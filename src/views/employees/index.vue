@@ -49,10 +49,11 @@
             <!--分页-->
             <el-pagination
               :total="total"
+              background
               :current-page="params.page"
               :page-size="params.size"
               :page-sizes="[10, 2]"
-              layout="prev, pager, next"
+              layout="prev, pager, next,sizes"
               @current-change="changePage"
               @size-change="sizeChange"
             />
@@ -81,7 +82,7 @@ export default {
       list: [], // 保存后台获取的员工信息
       params: {
         page: 1, // 当前页
-        size: 10 // 每页条数
+        size: 2 // 每页条数
       },
       total: 0, // 总数
       showDialog: false // 控制弹层的显示隐藏

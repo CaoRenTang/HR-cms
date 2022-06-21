@@ -47,10 +47,10 @@
               <el-switch v-model="qy"/>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="280">
-              <template>
+              <template #default="{row}">
                 <el-button size="small" type="text">查看</el-button>
                 <el-button size="small" type="text">分配角色</el-button>
-                <el-button size="small" type="text">删除</el-button>
+                <el-button size="small" type="text" @click="delEmployFn(row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import {getEmployeeListAPI} from '@/api/employees'
+import {getEmployeeListAPI, delEmployeeAPI} from '@/api/employees'
 import addEmployee from './components/add-employee'
 // 导入数据字典
 import Types from '@/api/constant/employees'
@@ -107,7 +107,8 @@ export default {
         size: 2 // 每页条数
       },
       total: 0, // 总数
-      showDialog: false // 控制弹层的显示隐藏
+      showDialog: false, // 控制弹层的显示隐藏
+      qy: true // 开关组件的开启关闭状态
     }
   },
   created() {
@@ -147,10 +148,6 @@ export default {
       this.params.size = newSize
       this.getEmployeeList()
     },
-    // 转换时间的函数方法
-    // formatDate(value, str = 'YYYY-MM-DD') {
-    //   return dayjs(value).format(str)
-    // },
     // 新增员工点击按钮
     addEmployeeFn() {
       this.showDialog = true
@@ -158,7 +155,22 @@ export default {
     // 关闭弹层自定义事件
     closeDialog() {
       this.showDialog = false
+    },
+    // 删除员工的点击事件->传入id
+    async delEmployFn(row) {
+      // 删除前提示
+      this.$confirm(`你确认要删除员工${row.username}', '温馨提示`).then(async () => {
+        // 调用删除接口
+        await delEmployeeAPI(row.id)
+        // 提示删除成功
+        this.$message.success('删除成功')
+        // 重新获取列表数据
+        await this.getEmployeeList()
+      }).catch(error => {
+        console.log(error)
+      })
     }
+
   }
 }
 </script>

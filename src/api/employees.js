@@ -22,13 +22,25 @@ export const getEmployeeListAPI = (params) => {
   })
 }
 /**
- * @description 新增员工列表
- *@
+ * @description: 添加员工
+ * @param {*} data
+ * @return {*}
  */
 export const getAddEmployeesAPI = (data) => {
   return request({
     method: 'POST',
     url: '/sys/user',
     data
+  })
+}
+/**
+ * @description: 删除员工
+ * @param {*} id 员工id
+ * @return {*}
+ */
+export const delEmployeeAPI = (id) => {
+  return request({
+    method: 'DELETE',
+    url: `/sys/user/${id}`
   })
 }

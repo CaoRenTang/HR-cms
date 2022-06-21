@@ -34,7 +34,15 @@
         <el-input v-model="formData.workNumber" placeholder="请输入工号" style="width:60%"/>
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
-        <el-input v-model="formData.departmentName" placeholder="请选择部门" style="width:60%"/>
+        <el-input v-model="formData.departmentName" placeholder="请选择部门" style="width:60%" @focus="showTree=true"/>
+        <el-row class="deptBox">
+          <el-tree
+            v-show="showTree"
+            :data="treeData"
+            :props="{ label: 'name' }"
+            @node-click="selectNode"
+          />
+        </el-row>
       </el-form-item>
       <el-form-item label="转正时间" prop="correctionTime">
         <el-date-picker v-model="formData.correctionTime" placeholder="请选择转正时间" style="width:60%"/>
@@ -53,6 +61,10 @@
 import EmployeeEnum from '@/api/constant/employees'
 // 导入数据接口
 import {getAddEmployeesAPI} from '@/api/employees'
+// 导入接口
+import {getDepartmentsAPI} from '@/api/departments'
+// 导入转换树形数据的方法
+import {listToTreeData} from '@/utils/index.js'
 
 export default {
   name: 'AddEmployees',
@@ -65,6 +77,9 @@ export default {
   },
   data() {
     return {
+      showTree: false, // 控制部门显示和隐藏的变量
+      // 保存树形列表数据
+      treeData: [],
       // 保存数据字典
       EmployeeEnum,
       // 表单数据对象
@@ -104,12 +119,29 @@ export default {
       }
     }
   },
+  created() {
+    this.hGetDepartments()
+  },
   methods: {
+    // 获取组织架构部门树形数据
+    async hGetDepartments() {
+      const res = await getDepartmentsAPI()
+      // 转换树形数据
+      this.treeData = listToTreeData(res.depts)
+    },
     // 子传父将弹层的关闭回调回传到父组件中
     closeDialog() {
       this.$emit('close-dialog')
       // 重置表单状态
       this.$refs.addForm.resetFields()
+    },
+    // 选择部门数据
+    selectNode(selName) {
+      // console.log('选中了：', selName)
+      // 将选中的部门名称赋值到输入框中
+      this.formData.departmentName = selName.name
+      // 关闭部门选择
+      this.showTree = false
     },
     // 新增确认
     submitAdd() {
@@ -132,5 +164,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.deptBox {
+  width: 336px;
+  border: 1px solid #ddd;
+}
 </style>

@@ -108,7 +108,7 @@ export default {
       },
       total: 0, // 总数
       showDialog: false, // 控制弹层的显示隐藏
-      qy: true // 开关组件的开启关闭状态
+      qy: false // 开关组件的开启关闭状态 false为关闭
     }
   },
   created() {

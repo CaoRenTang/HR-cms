@@ -18,16 +18,22 @@
         </div>
         <div>
           <!-- table列表 -->
+          <!--
+              1. 通过 Table 的default-sort属性设置默认的排序列和排序顺序
+              2. 排序方式：ascending 升序（从小到大）   descending 降序（从大到小）
+          -->
           <el-table
             :data="list"
+            :default-sort="{prop: 'timeOfEntry', order: 'descending'}"
             border
           >
+            >
             <el-table-column label="序号" type="index"/>
             <el-table-column label="姓名" prop="username"/>
-            <el-table-column label="工号" prop="workNumber"/>
+            <el-table-column label="工号" prop="workNumber" sortable/>
             <el-table-column label="聘用形式" prop="formOfEmployment"/>
             <el-table-column label="部门" prop="departmentName"/>
-            <el-table-column label="入职时间" prop="timeOfEntry"/>
+            <el-table-column label="入职时间" prop="timeOfEntry" sortable/>
             <el-table-column label="账户状态">
               <el-switch v-model="qy"/>
             </el-table-column>
@@ -48,11 +54,11 @@
           >
             <!--分页-->
             <el-pagination
-              :total="total"
-              background
               :current-page="params.page"
               :page-size="params.size"
               :page-sizes="[10, 2]"
+              :total="total"
+              background
               layout="prev, pager, next,sizes"
               @current-change="changePage"
               @size-change="sizeChange"

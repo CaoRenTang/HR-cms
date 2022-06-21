@@ -21,3 +21,14 @@ export const getEmployeeListAPI = (params) => {
     params
   })
 }
+/**
+ * @description 新增员工列表
+ *@
+ */
+export const getAddEmployeesAPI = (data) => {
+  return request({
+    method: 'POST',
+    url: '/sys/user',
+    data
+  })
+}

@@ -43,7 +43,7 @@
     <!-- footer插槽 -->
     <template v-slot:footer>
       <el-button @click="closeDialog">取消</el-button>
-      <el-button type="primary">确定</el-button>
+      <el-button type="primary" @click="submitAdd">确定</el-button>
     </template>
   </el-dialog>
 </template>
@@ -51,6 +51,8 @@
 <script>
 // 引入聘用形式数据字典
 import EmployeeEnum from '@/api/constant/employees'
+// 导入数据接口
+import {getAddEmployeesAPI} from '@/api/employees'
 
 export default {
   name: 'AddEmployees',
@@ -75,6 +77,7 @@ export default {
         timeOfEntry: '', // 员工入职日期
         correctionTime: '' // 员工转正日期
       },
+      employeesData: [], // 保存后端获取的数据
       // 校验表单
       rules: {
         username: [
@@ -96,7 +99,8 @@ export default {
         ],
         timeOfEntry: [
           {required: true, message: '请选择入职时间', trigger: ['blur', 'change']}
-        ]
+        ],
+        correctionTime: [{required: true, message: '请选择入职时间', trigger: ['blur', 'change']}]
       }
     }
   },
@@ -104,6 +108,25 @@ export default {
     // 子传父将弹层的关闭回调回传到父组件中
     closeDialog() {
       this.$emit('close-dialog')
+      // 重置表单状态
+      this.$refs.addForm.resetFields()
+    },
+    // 新增确认
+    submitAdd() {
+      // 对表单进行兜底校验
+      this.$refs.addForm.validate(async isOK => {
+        if (isOK) {
+          // 检验通过->调用接口->提示成功->关闭弹窗
+          const res = await getAddEmployeesAPI(this.formData)
+          this.employeesData = res
+          // console.log(this.employeesData)
+          this.$message.success('添加成功')
+          // 关闭弹层
+          this.$emit('close-dialog')
+          // 调用父组件中的重新获取列表方法
+          this.$parent.getEmployeeList()
+        }
+      })
     }
   }
 }

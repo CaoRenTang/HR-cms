@@ -75,6 +75,7 @@
           </el-row>
         </div>
       </el-card>
+      <!--      :showDialog向子组件中传递变量，控制显示隐藏-->
       <add-employee
         :show-dialog="showDialog"
         @close-dialog="closeDialog"
@@ -89,6 +90,7 @@ import {getEmployeeListAPI} from '@/api/employees'
 import addEmployee from './components/add-employee'
 // 导入数据字典
 import Types from '@/api/constant/employees'
+// 导入时间格式化插件
 import dayjs from 'dayjs'
 
 export default {
@@ -116,6 +118,7 @@ export default {
     formatEmploy(type) {
       // console.log('数据字典', this.Types.hireType)
       const hire_type = this.Types.hireType
+      // map={1:'正式',2:'非正式'}
       const map = {}
       hire_type.forEach(item => {
         map[item.id] = item.value
@@ -123,8 +126,8 @@ export default {
       return map[type]
     },
     // 格式化入职时间
-    formatDate(value, str = 'YYYY-MM-DD') {
-      return dayjs(value).format(str)
+    formatDate(value) {
+      return dayjs(value).format('YYYY年MM月DD日')
     },
     // 获取员工信息列表数据
     async getEmployeeList() {

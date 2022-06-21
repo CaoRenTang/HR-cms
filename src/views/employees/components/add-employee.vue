@@ -1,36 +1,43 @@
 <template>
   <el-dialog
-    title="新增员工"
     :visible="showDialog"
+    title="新增员工"
     @close="closeDialog"
   >
     <!-- 表单 -->
     <el-form
       ref="addForm"
-      label-width="120px"
       :model="formData"
       :rules="rules"
+      label-width="120px"
     >
       <el-form-item label="姓名" prop="username">
-        <el-input v-model="formData.username" style="width:60%" placeholder="请输入姓名"/>
+        <el-input v-model="formData.username" placeholder="请输入姓名" style="width:60%"/>
       </el-form-item>
       <el-form-item label="手机" prop="mobile">
-        <el-input v-model="formData.mobile" style="width:60%" placeholder="请输入手机号"/>
+        <el-input v-model="formData.mobile" placeholder="请输入手机号" style="width:60%"/>
       </el-form-item>
       <el-form-item label="入职时间" prop="timeOfEntry">
-        <el-date-picker v-model="formData.timeOfEntry" style="width:60%" placeholder="请选择入职时间"/>
+        <el-date-picker v-model="formData.timeOfEntry" placeholder="请选择入职时间" style="width:60%"/>
       </el-form-item>
       <el-form-item label="聘用形式" prop="formOfEmployment">
-        <el-select v-model="formData.formOfEmployment" style="width:60%" placeholder="请选择" value=""/>
+        <el-select v-model="formData.formOfEmployment" placeholder="请选择" style="width:60%" value="">
+          <el-option
+            v-for="item in EmployeeEnum.hireType"
+            :key="item.id"
+            :label="item.value"
+            :value="item.id"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workNumber">
-        <el-input v-model="formData.workNumber" style="width:60%" placeholder="请输入工号"/>
+        <el-input v-model="formData.workNumber" placeholder="请输入工号" style="width:60%"/>
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
-        <el-input v-model="formData.departmentName" style="width:60%" placeholder="请选择部门"/>
+        <el-input v-model="formData.departmentName" placeholder="请选择部门" style="width:60%"/>
       </el-form-item>
       <el-form-item label="转正时间" prop="correctionTime">
-        <el-date-picker v-model="formData.correctionTime" style="width:60%" placeholder="请选择转正时间"/>
+        <el-date-picker v-model="formData.correctionTime" placeholder="请选择转正时间" style="width:60%"/>
       </el-form-item>
     </el-form>
     <!-- footer插槽 -->
@@ -42,6 +49,9 @@
 </template>
 
 <script>
+// 引入聘用形式数据字典
+import EmployeeEnum from '@/api/constant/employees'
+
 export default {
   name: 'AddEmployees',
   // 父组件传值
@@ -53,6 +63,8 @@ export default {
   },
   data() {
     return {
+      // 保存数据字典
+      EmployeeEnum,
       // 表单数据对象
       formData: {
         username: '', // 用户名

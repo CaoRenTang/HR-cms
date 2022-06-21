@@ -38,7 +38,11 @@
               </template>
             </el-table-column>
             <el-table-column label="部门" prop="departmentName"/>
-            <el-table-column label="入职时间" prop="timeOfEntry" sortable/>
+            <el-table-column label="入职时间" prop="timeOfEntry" sortable>
+              <template #default="{row}">
+                {{ formatDate(row.timeOfEntry) }}
+              </template>
+            </el-table-column>
             <el-table-column label="账户状态">
               <el-switch v-model="qy"/>
             </el-table-column>
@@ -85,6 +89,7 @@ import {getEmployeeListAPI} from '@/api/employees'
 import addEmployee from './components/add-employee'
 // 导入数据字典
 import Types from '@/api/constant/employees'
+import dayjs from 'dayjs'
 
 export default {
   components: {
@@ -116,6 +121,10 @@ export default {
         map[item.id] = item.value
       })
       return map[type]
+    },
+    // 格式化入职时间
+    formatDate(value, str = 'YYYY-MM-DD') {
+      return dayjs(value).format(str)
     },
     // 获取员工信息列表数据
     async getEmployeeList() {

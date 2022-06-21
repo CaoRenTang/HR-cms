@@ -44,3 +44,16 @@ export const delEmployeeAPI = (id) => {
     url: `/sys/user/${id}`
   })
 }
+
+/**
+ * @description: 导入excel批量添加员工
+ * @param {*} data 包含员工信息的数组
+ * @return {*}
+ */
+export const importEmployeesAPI = (data) => {
+  return request({
+    url: '/sys/user/batch',
+    method: 'post',
+    data
+  })
+}

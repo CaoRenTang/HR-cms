@@ -67,7 +67,8 @@
 </template>
 
 <script>
-import {getUserDetailByIdAPI, saveUserDetailByIdAPI} from '@/api/user'
+import {getUserDetailByIdAPI} from '@/api/user'
+import {saveUserDetailByIdAPI} from '@/api/employees'
 
 export default {
   name: 'Detail',
@@ -77,7 +78,7 @@ export default {
       formData: {},
       // 校验规则
       rules: {
-        username: [{required: true, min: 3, max: 10, message: '用户名必填！', trigger: 'change'}]
+        username: [{required: true, message: '用户名必填！', trigger: 'change'}]
       }
 
     }
@@ -101,6 +102,10 @@ export default {
           await saveUserDetailByIdAPI(this.formData)
           // 提示修改成功
           this.$message.success('修改成功')
+          // 更新vuex当前登录人信息(如实现当前修改用户名和登录账号一致使用)
+          // await this.$store.dispatch('/user/getUserInfoAction')
+          // 返回到员工管理页面
+          this.$router.push('/employees')
         }
       })
     }

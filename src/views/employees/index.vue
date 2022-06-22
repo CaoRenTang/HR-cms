@@ -54,7 +54,8 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="280">
               <template #default="{row}">
-                <el-button size="small" type="text">查看</el-button>
+                <el-button size="small" type="text" @click="$router.push(`/employees/detail/${row.id}`)">查看
+                </el-button>
                 <el-button size="small" type="text">分配角色</el-button>
                 <el-button size="small" type="text" @click="delEmployFn(row)">删除</el-button>
               </template>

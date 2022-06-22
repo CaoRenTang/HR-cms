@@ -11,7 +11,7 @@
             <!-- 插入到right插槽位置 -->
             <template #right>
               <el-button size="small" type="warning" @click="$router.push('/import')">导入excel</el-button>
-              <el-button size="small" type="danger">导出excel</el-button>
+              <el-button size="small" type="danger" @click="exportData">导出excel</el-button>
               <el-button size="small" type="primary" @click="addEmployeeFn">新增员工</el-button>
             </template>
           </PageTools>
@@ -99,6 +99,8 @@ export default {
   },
   data() {
     return {
+      // 导出loading效果
+      downloadLoading: false,
       // 储存数据字典
       Types: Types,
       list: [], // 保存后台获取的员工信息
@@ -174,6 +176,32 @@ export default {
         await this.getEmployeeList()
       }).catch(error => {
         console.log(error)
+      })
+    },
+    // 导出员工信息（下载到本地）
+    exportData() {
+      this.downloadLoading = true
+      // import('@/utils/Export2Excel') 异步懒加载模块
+      // 因为：excel导出代码量比较大而且功能使用频率不高，
+      // 所以采用懒加载方式，点击使用的时候采取加载这个模块
+      import('@/utils/Export2Excel').then(excel => {
+        // 核心：准备excel表头和数据
+        const tHeader = ['姓名', '性别', '期望薪资']
+        // 说明❓：二维数据
+        const data = [
+          ['曹仁堂', '男', 18000],
+          ['王晓阳', '男', 18000],
+          ['杨瑭瑭', '女', 19000]
+        ]
+        // == 使用excel.export_json_to_excel 方法实现导出 ==
+        excel.export_json_to_excel({
+          header: tHeader, // excel文件表头
+          data, // 导出excel数据
+          filename: `员工信息-${Math.random()}`, // 下载保存到本地电脑excel文件名
+          autoWidth: true, // 单元格自适应
+          bookType: 'xlsx' // 导出文件格式
+        })
+        this.downloadLoading = false
       })
     }
 

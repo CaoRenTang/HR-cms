@@ -11,6 +11,13 @@
       <!--      图片上传预览-->
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"/>
+      <el-progress
+        v-if="showProgress"
+        :percentage="percentage"
+        :stroke-width="6"
+        status="success"
+        type="line"
+      />
     </el-upload>
   </div>
 </template>
@@ -26,7 +33,12 @@ const cos = new COS({
 export default {
   data() {
     return {
-      imageUrl: ''
+      imageUrl: '',
+      // 控制进度条显隐
+      showProgress: false,
+      // 图片上传进度：0-100
+      percentage: 0
+
     }
   },
   methods: {
@@ -36,6 +48,7 @@ export default {
     // 自定义上传
     upload(params) {
       // console.log(params)
+      this.showProgress = true
       // 云上传代码
       cos.putObject({
         Bucket: 'hr-cms-1311688877', /* 填入您自己的存储桶，必须字段 */
@@ -45,12 +58,19 @@ export default {
         Body: params.file, // 上传文件对象
         onProgress: (progressData) => {
           console.log(JSON.stringify(progressData))
+          // 百分比转换：progressData.percent * 100
+          this.percentage = progressData.percent * 100
         }
       }, (err, data) => {
         // 上传失败或成功
         console.log(err || data)
         if (data.statusCode === 200) {
-          this.imageUrl = `https://${data.Location}`
+          // 延迟看进度条效果
+          setTimeout(() => {
+            this.imageUrl = `https://${data.Location}`
+            this.showProgress = false
+            this.percentage = 0
+          }, 600)
         }
       })
     },
@@ -96,6 +116,15 @@ export default {
   width: 178px;
   height: 178px;
   display: block;
+}
+
+.progress {
+  position: absolute;
+  display: flex;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
 }
 </style>
 

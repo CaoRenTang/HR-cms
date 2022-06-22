@@ -46,7 +46,8 @@
                   <el-col :span="12">
                     <el-form-item label="员工头像">
                       <!-- 放置上传图片 -->
-                      <el-image :src="require('@/assets/common/head.jpg')"/>
+                      <!--<el-image :src="require('@/assets/common/head.jpg')" />-->
+                      <UploadImg/>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -80,7 +81,6 @@ export default {
       rules: {
         username: [{required: true, message: '用户名必填！', trigger: 'change'}]
       }
-
     }
   },
   created() {

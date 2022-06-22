@@ -1,16 +1,16 @@
 <template>
   <div>
+<!--    `:http-request="upload" 开启自定义上传-->
     <el-upload
       :before-upload="beforeAvatarUpload"
-      :on-success="handleAvatarSuccess"
+      :http-request="upload"
       :show-file-list="false"
-      action="https://jsonplaceholder.typicode.com/posts/"
+      action="#"
       class="avatar-uploader"
     >
       <!--      图片上传预览-->
       <img v-if="imageUrl" :src="imageUrl" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"/>
-
     </el-upload>
   </div>
 </template>
@@ -23,8 +23,12 @@ export default {
     }
   },
   methods: {
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw)
+    // handleAvatarSuccess(res, file) {
+    //   this.imageUrl = URL.createObjectURL(file.raw)
+    // },
+    // 自定义上传
+    upload(params) {
+      console.log(params)
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'

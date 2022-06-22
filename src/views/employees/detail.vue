@@ -91,7 +91,7 @@ export default {
     // 获取员工详情
     async getDetail() {
       const res = await getUserDetailByIdAPI(this.$route.params.id)
-      console.log(res)
+      // console.log(res)
       this.formData = res
     },
     updateData() {

@@ -11,7 +11,13 @@
             <!-- 插入到right插槽位置 -->
             <template #right>
               <el-button size="small" type="warning" @click="$router.push('/import')">导入excel</el-button>
-              <el-button size="small" type="danger" @click="exportData">导出excel</el-button>
+              <el-button
+                :loading="downloadLoading"
+                size="small"
+                type="danger"
+                @click="exportData"
+              >导出excel
+              </el-button>
               <el-button size="small" type="primary" @click="addEmployeeFn">新增员工</el-button>
             </template>
           </PageTools>
@@ -92,6 +98,8 @@ import addEmployee from './components/add-employee'
 import Types from '@/api/constant/employees'
 // 导入时间格式化插件
 import dayjs from 'dayjs'
+// 导入导出实现的函数方法
+import {transformTdata} from '@/utils'
 
 export default {
   components: {
@@ -185,15 +193,22 @@ export default {
       // 因为：excel导出代码量比较大而且功能使用频率不高，
       // 所以采用懒加载方式，点击使用的时候采取加载这个模块
       import('@/utils/Export2Excel').then(excel => {
-        // 核心：准备excel表头和数据
-        const tHeader = ['姓名', '性别', '期望薪资']
-        // 说明❓：二维数据
-        const data = [
-          ['曹仁堂', '男', 18000],
-          ['王晓阳', '男', 18000],
-          ['杨瑭瑭', '女', 19000]
-        ]
-        // == 使用excel.export_json_to_excel 方法实现导出 ==
+        // 1.准备导出数据的map对象：包含要导出员工信息的表头（中文属性名）和员工信息的表头（英文属性名）
+        const map = {
+          '手机号': 'mobile',
+          '姓名': 'username',
+          '入职日期': 'timeOfEntry',
+          '聘用形式': 'formOfEmployment',
+          '工号': 'workNumber',
+          '转正日期': 'correctionTime',
+          '部门': 'departmentName'
+        }
+        // 2.核心：准备excel表头和数据,Object.keys()可以获取对象的key值
+        const tHeader = Object.keys(map)
+        // 3.说明❓：二维数据
+        const data = transformTdata(this.list, Object.values(map))
+        console.log('转换后的二维数组', data)
+        // 4.使用excel.export_json_to_excel 方法实现导出
         excel.export_json_to_excel({
           header: tHeader, // excel文件表头
           data, // 导出excel数据

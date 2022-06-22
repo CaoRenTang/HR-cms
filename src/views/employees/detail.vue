@@ -47,7 +47,10 @@
                     <el-form-item label="员工头像">
                       <!-- 放置上传图片 -->
                       <!--<el-image :src="require('@/assets/common/head.jpg')" />-->
-                      <UploadImg/>
+                      <UploadImg
+                        :staff-photo="formData.staffPhoto"
+                        @change-photo="changePhoto"
+                      />
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -76,7 +79,12 @@ export default {
   data() {
     return {
       // 表单数据对象
-      formData: {},
+      formData: {
+        username: '',
+        timeOfEntry: '',
+        // 头像
+        staffPhoto: ''
+      },
       // 校验规则
       rules: {
         username: [{required: true, message: '用户名必填！', trigger: 'change'}]
@@ -88,10 +96,19 @@ export default {
     this.getDetail()
   },
   methods: {
+    // 修改头像地址
+    changePhoto(newUrl) {
+      console.log('云图片地址：', newUrl)
+      this.formData.staffPhoto = newUrl
+    },
     // 获取员工详情
     async getDetail() {
       const res = await getUserDetailByIdAPI(this.$route.params.id)
       // console.log(res)
+      // 添加头像回显问题
+      if (!res.staffPhoto) {
+        res.staffPhoto = ''
+      }
       this.formData = res
     },
     updateData() {

@@ -9,7 +9,7 @@
       class="avatar-uploader"
     >
       <!--      图片上传预览-->
-      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <img v-if="staffPhoto" :src="staffPhoto" class="avatar">
       <i v-else class="el-icon-plus avatar-uploader-icon"/>
       <el-progress
         v-if="showProgress"
@@ -31,6 +31,13 @@ const cos = new COS({
   SecretKey: 'lGUR7WfZDaiZ9SVIp67rKWR6UbS2LOBi' // 身份秘钥
 })
 export default {
+  props: {
+    // 上传组件默认显示的头像
+    staffPhoto: {
+      type: String,
+      default: ''
+    }
+  },
   data() {
     return {
       imageUrl: '',
@@ -70,6 +77,7 @@ export default {
             this.imageUrl = `https://${data.Location}`
             this.showProgress = false
             this.percentage = 0
+            this.$emit('change-photo', `https://${data.Location}`)
           }, 600)
         }
       })

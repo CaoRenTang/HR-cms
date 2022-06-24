@@ -54,6 +54,7 @@ service.interceptors.response.use(
     // 场景：如果token失效了，状态码 401，删除token重新登录
     console.dir(error) // for debug
     if (error.response.status === 401) {
+      if (router.currentRoute.path === '/login') return
       // 删除用户信息
       store.dispatch('user/logoutAction')
       Message.error(error.response.data.message)

@@ -105,7 +105,10 @@
         </el-row>
       </el-dialog>
       <!--      员工分配角色-->
-      <AssignRole :show-role-dialog.sync="showRoleDialog"/>
+      <AssignRole
+        ref="roles"
+        :show-role-dialog.sync="showRoleDialog"
+      />
     </div>
   </div>
 </template>
@@ -252,8 +255,10 @@ export default {
       })
     },
     // 分配权限点击事件
-    distribute() {
+    distribute(id) {
       this.showRoleDialog = true
+      // 调用子组件中的方法
+      this.$refs.roles.getRolesById(id)
     }
 
   }

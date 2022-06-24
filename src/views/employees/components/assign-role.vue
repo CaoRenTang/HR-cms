@@ -19,6 +19,7 @@
 
 <script>
 import {getRoleListAPI} from '@/api/setting'
+import {getUserDetailByIdAPI} from '@/api/user'
 
 export default {
   // 父组件传递的，控制显隐
@@ -31,7 +32,8 @@ export default {
   data() {
     return {
       roleIds: [], // 保存选中角色Id
-      list: [] // 保存角色选项列表
+      list: [], // 保存角色选项列表
+      userId: '' // 保存用户id
     }
   },
   created() {
@@ -41,6 +43,15 @@ export default {
     // 子组件传递变量，关闭弹层
     close() {
       this.$emit('update:showRoleDialog', false)
+    },
+    // 获取用户信息分配角色数据回显
+    async getRolesById(id) {
+      // 调用获取用户信息接口
+      const res = await getUserDetailByIdAPI(id)
+      // 存储当前点击的用户ID
+      this.userId = id
+      // console.log('用户之前分配的角色数据：', res.roleIds)
+      this.roleIds = res.roleIds
     },
     // 获取角色列表
     async getRoleList() {
@@ -52,3 +63,4 @@ export default {
   }
 }
 </script>
+

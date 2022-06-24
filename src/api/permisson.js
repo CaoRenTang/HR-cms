@@ -38,7 +38,7 @@ export function updatePermissionAPI(data) {
 }
 
 // 删除权限 id:权限点ID
-export function delPermission(id) {
+export function delPermissionAPI(id) {
   return request({
     url: `/sys/permission/${id}`,
     method: 'delete'
@@ -46,7 +46,7 @@ export function delPermission(id) {
 }
 
 // 获取权限详情 id:权限点ID
-export function getPermissionDetail(id) {
+export function getPermissionDetailAPI(id) {
   return request({
     url: `/sys/permission/${id}`
   })

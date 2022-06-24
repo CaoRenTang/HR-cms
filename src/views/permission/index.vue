@@ -20,16 +20,16 @@
               @click="addPerm(2,row.id)"
             >添加
             </el-button>
-            <el-button type="text">编辑</el-button>
-            <el-button type="text">删除</el-button>
+            <el-button type="text" @click="editPermission(row)">编辑</el-button>
+            <el-button type="text" @click="delFn(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
     <!--添加权限弹层-->
     <el-dialog
+      :title="formData.id ? '编辑权限' : '新增权限'"
       :visible.sync="showDialog"
-      title="弹层标题"
       @close="close"
     >
       <!-- 表单内容 -->
@@ -70,7 +70,13 @@
 </template>
 
 <script>
-import {getPermissionListAPI, addPermissionAPI} from '@/api/permisson'
+import {
+  getPermissionListAPI,
+  addPermissionAPI,
+  delPermissionAPI,
+  getPermissionDetailAPI,
+  updatePermissionAPI
+} from '@/api/permisson'
 // 导入转换树形数据的方法
 import {listToTreeData} from '@/utils'
 
@@ -113,27 +119,71 @@ export default {
       this.formData.type = type
       this.formData.pid = pid
     },
-    // 新增权限点击事件
-    submit() {
-      // 表单兜底校验
-      this.$refs.fm.validate(async (isOk) => {
-        if (isOk) {
-          // 校验通过，调用新增接口
-          await addPermissionAPI(this.formData)
-          // 消息提示，新增成功
-          this.$message.success(this.formData.type === 1 ? '页面权限新增成功！' : '按钮权限新增成功！')
-          // 关闭弹层
-          this.showDialog = false
-          // 重新刷新列表
-          this.getPermissionList()
-        }
-      })
+    // --------------------------新增||编辑权限点击事件--------------------
+    async submit() {
+      // 编辑更新数据，有id为编辑，没有id为新增
+      if (this.formData.id) {
+        // 调用编辑接口
+        await updatePermissionAPI(this.formData)
+        // 提示
+        this.$message.success('修改权限信息成功')
+      } else {
+        // 新增
+        await this.$refs.fm.validate(async (isOk) => {
+          if (isOk) {
+            // 校验通过，调用新增接口
+            await addPermissionAPI(this.formData)
+            // 消息提示，新增成功
+            this.$message.success(this.formData.type === 1 ? '页面权限新增成功！' : '按钮权限新增成功！')
+          }
+        })
+      }
+      // 关闭弹层
+      this.showDialog = false
+      // 重新刷新列表
+      this.getPermissionList()
     },
-    // 关闭弹层重置表单
+    // 添加成功关闭弹层重置表单
     close() {
       // 重置表单
       console.log(this.$refs.fm)
       this.$refs.fm.resetFields()
+      this.formData = {
+        enVisible: '0', // 开启
+        name: '', // 名称
+        code: '', // 权限标识
+        description: '', // 描述
+        type: '', // 类型
+        pid: '' // 添加到哪个节点下
+      }
+    },
+    // --------------------删除权限点---------------------
+    delFn(row) {
+      this.$confirm(`此操作将删除${row.name}, 是否继续?`, '提示', {
+        type: 'warning'
+      }).then(async () => {
+        // 判断当前要删除的权限下是否有子权限，有子权限不能删除
+        if (row.children && row.children.length > 0) {
+          return this.$message.error('当前权限下，有按钮权限，不能直接删除！')
+        }
+        // 没有子权限，调用删除接口
+        await delPermissionAPI(row.id)
+        this.$message.success('删除成功')
+        this.getPermissionList()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    // ---------------------编辑权限---------------------
+    async editPermission(row) {
+      // 点击编辑打开弹层
+      this.showDialog = true
+      // 调用后台接口
+      const data = await getPermissionDetailAPI(row.id)
+      this.formData = data
     }
   }
 }

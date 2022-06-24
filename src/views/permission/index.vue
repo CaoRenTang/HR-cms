@@ -125,18 +125,13 @@ export default {
       if (this.formData.id) {
         // 调用编辑接口
         await updatePermissionAPI(this.formData)
-        // 提示
+        // 提示信息
         this.$message.success('修改权限信息成功')
       } else {
-        // 新增
-        await this.$refs.fm.validate(async (isOk) => {
-          if (isOk) {
-            // 校验通过，调用新增接口
-            await addPermissionAPI(this.formData)
-            // 消息提示，新增成功
-            this.$message.success(this.formData.type === 1 ? '页面权限新增成功！' : '按钮权限新增成功！')
-          }
-        })
+        // 调用新增接口
+        await addPermissionAPI(this.formData)
+        // 消息提示，新增成功
+        this.$message.success(this.formData.type === 1 ? '页面权限新增成功！' : '按钮权限新增成功！')
       }
       // 关闭弹层
       this.showDialog = false
@@ -146,8 +141,9 @@ export default {
     // 添加成功关闭弹层重置表单
     close() {
       // 重置表单
-      console.log(this.$refs.fm)
+      // console.log(this.$refs.fm)
       this.$refs.fm.resetFields()
+      // 手动重置表单
       this.formData = {
         enVisible: '0', // 开启
         name: '', // 名称

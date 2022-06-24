@@ -61,7 +61,7 @@
               <template #default="{row}">
                 <el-button size="small" type="text" @click="$router.push(`/employees/detail/${row.id}`)">查看
                 </el-button>
-                <el-button size="small" type="text">分配角色</el-button>
+                <el-button size="small" type="text" @click="distribute(row.id)">分配角色</el-button>
                 <el-button size="small" type="text" @click="delEmployFn(row)">删除</el-button>
               </template>
             </el-table-column>
@@ -104,7 +104,8 @@
           <canvas ref="cv"/>
         </el-row>
       </el-dialog>
-
+      <!--      员工分配角色-->
+      <AssignRole :show-role-dialog.sync="showRoleDialog"/>
     </div>
   </div>
 </template>
@@ -112,6 +113,7 @@
 <script>
 import {getEmployeeListAPI, delEmployeeAPI} from '@/api/employees'
 import addEmployee from './components/add-employee'
+import AssignRole from './components/assign-role'
 // 导入数据字典
 import Types from '@/api/constant/employees'
 // 导入时间格式化插件
@@ -122,10 +124,13 @@ import QrCode from 'qrcode'
 
 export default {
   components: {
-    addEmployee
+    addEmployee,
+    AssignRole
   },
   data() {
     return {
+      // 控制分配弹层显示隐藏
+      showRoleDialog: false,
       // 导出loading效果
       downloadLoading: false,
       // 储存数据字典
@@ -245,6 +250,10 @@ export default {
         })
         this.downloadLoading = false
       })
+    },
+    // 分配权限点击事件
+    distribute() {
+      this.showRoleDialog = true
     }
 
   }

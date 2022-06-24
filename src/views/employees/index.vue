@@ -39,7 +39,7 @@
             <el-table-column label="姓名" prop="username"/>
             <el-table-column label="头像" prop="staffPhoto">
               <template #default="{row}">
-                <el-image :src="row.staffPhoto" class="staff"/>
+                <el-image :src="row.staffPhoto" class="staff" @click="clickShowCodeDialog(row.staffPhoto)"/>
               </template>
             </el-table-column>
             <el-table-column label="工号" prop="workNumber" sortable/>
@@ -87,11 +87,23 @@
           </el-row>
         </div>
       </el-card>
-      <!--      :showDialog向子组件中传递变量，控制显示隐藏-->
+      <!--  新增员工弹层    :showDialog向子组件中传递变量，控制显示隐藏-->
       <add-employee
         :show-dialog="showDialog"
         @close-dialog="closeDialog"
       />
+      <!-- 分享展示, 预览的二维码的弹层 -->
+      <el-dialog
+        :visible="showCodeDialog"
+        title="头像二维码"
+        width="250px"
+        @close="showCodeDialog = false"
+      >
+        <!-- 二维码 -->
+        <el-row justify="center" type="flex">
+          <canvas ref="cv"/>
+        </el-row>
+      </el-dialog>
 
     </div>
   </div>
@@ -106,6 +118,7 @@ import Types from '@/api/constant/employees'
 import dayjs from 'dayjs'
 // 导入导出实现的函数方法
 import {transformTdata} from '@/utils'
+import QrCode from 'qrcode'
 
 export default {
   components: {
@@ -124,6 +137,7 @@ export default {
       },
       total: 0, // 总数
       showDialog: false, // 控制弹层的显示隐藏
+      showCodeDialog: false, // 二维码显示隐藏
       qy: false // 开关组件的开启关闭状态 false为关闭
     }
   },
@@ -131,6 +145,13 @@ export default {
     this.getEmployeeList()
   },
   methods: {
+    // 图片二维码点击事件
+    clickShowCodeDialog(newUrl) {
+      this.showCodeDialog = true
+      this.$nextTick(() => {
+        QrCode.toCanvas(this.$refs.cv, newUrl)
+      })
+    },
     // 格式化聘用形式
     formatEmploy(type) {
       // console.log('数据字典', this.Types.hireType)

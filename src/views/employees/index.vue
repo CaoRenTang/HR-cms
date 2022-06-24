@@ -37,6 +37,11 @@
             >
             <el-table-column label="序号" type="index"/>
             <el-table-column label="姓名" prop="username"/>
+            <el-table-column label="头像" prop="staffPhoto">
+              <template #default="{row}">
+                <el-image :src="row.staffPhoto" class="staff"/>
+              </template>
+            </el-table-column>
             <el-table-column label="工号" prop="workNumber" sortable/>
             <el-table-column label="聘用形式" prop="formOfEmployment">
               <template #default="{row}">
@@ -226,4 +231,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.staff {
+  width: 70px;
+  height: 70px;
+  border-radius: 100%;
+}
 </style>

@@ -27,9 +27,18 @@
       </el-table>
     </el-card>
     <!--添加权限弹层-->
-    <el-dialog :visible.sync="showDialog" title="弹层标题" @close="showDialog = false">
+    <el-dialog
+      :visible.sync="showDialog"
+      title="弹层标题"
+      @close="close"
+    >
       <!-- 表单内容 -->
-      <el-form :model="formData" :rules="rules" label-width="100px">
+      <el-form
+        ref="fm"
+        :model="formData"
+        :rules="rules"
+        label-width="100px"
+      >
         <el-form-item label="权限名称">
           <el-input v-model="formData.name"/>
         </el-form-item>
@@ -53,7 +62,7 @@
       <template #footer>
         <div style="text-align: right;">
           <el-button @click="showDialog = false">取消</el-button>
-          <el-button type="primary">确定</el-button>
+          <el-button type="primary" @click="submit">确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -61,7 +70,7 @@
 </template>
 
 <script>
-import {getPermissionListAPI} from '@/api/permisson'
+import {getPermissionListAPI, addPermissionAPI} from '@/api/permisson'
 // 导入转换树形数据的方法
 import {listToTreeData} from '@/utils'
 
@@ -93,7 +102,7 @@ export default {
     // 获取权限列表
     async getPermissionList() {
       const res = await getPermissionListAPI()
-      console.log(res)
+      // console.log(res)
       this.list = listToTreeData(res)
     },
     // 添加权限点击事件
@@ -103,6 +112,28 @@ export default {
       // 储存新增权限的type和pid值
       this.formData.type = type
       this.formData.pid = pid
+    },
+    // 新增权限点击事件
+    submit() {
+      // 表单兜底校验
+      this.$refs.fm.validate(async (isOk) => {
+        if (isOk) {
+          // 校验通过，调用新增接口
+          await addPermissionAPI(this.formData)
+          // 消息提示，新增成功
+          this.$message.success(this.formData.type === 1 ? '页面权限新增成功！' : '按钮权限新增成功！')
+          // 关闭弹层
+          this.showDialog = false
+          // 重新刷新列表
+          this.getPermissionList()
+        }
+      })
+    },
+    // 关闭弹层重置表单
+    close() {
+      // 重置表单
+      console.log(this.$refs.fm)
+      this.$refs.fm.resetFields()
     }
   }
 }

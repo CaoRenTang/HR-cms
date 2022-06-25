@@ -69,8 +69,8 @@ export default {
       })
       // 分配角色成功
       this.$message.success('分配角色成功')
-      // 关闭弹层
-      this.$emit('update:showRoleDialog', false)
+      // 调用方法，关闭弹层
+      this.close()
     }
   }
 }

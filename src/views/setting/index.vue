@@ -24,7 +24,7 @@
               <el-table-column label="描述" prop="description" />
               <el-table-column label="操作">
                 <template #default="{row}">
-                  <el-button size="small" type="success">分配权限</el-button>
+                  <el-button size="small" type="success" @click="openAssign(row.id)">分配权限</el-button>
                   <el-button size="small" type="primary" @click="editFn(row)">编辑</el-button>
                   <el-button size="small" type="danger" @click="deleteRole(row)">删除</el-button>
                 </template>
@@ -71,17 +71,27 @@
           </el-col>
         </el-row>
       </el-dialog>
+      <!--      角色分配弹出层-->
+      <AssignPerm
+        ref="aperm"
+        :show-assign-dialog.sync="showAssignDialog"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getRoleListAPI, addRoleAPI, deleteRoleAPI, getRoleDetailAPI, updateRoleAPI } from '@/api/setting'
+import {getRoleListAPI, addRoleAPI, deleteRoleAPI, getRoleDetailAPI, updateRoleAPI} from '@/api/setting'
+import AssignPerm from './components/assign-perm'
 
 export default {
   name: 'Setting',
+  components: {
+    AssignPerm
+  },
   data() {
     return {
+      showAssignDialog: false, // 控制弹层显隐
       roleList: [], // 保存角色信息
       page: {
         // 放置页码及相关数据
@@ -107,9 +117,13 @@ export default {
     this.getRoleList()
   },
   methods: {
+    // 分配权限点击事件,出现弹层
+    openAssign(id) {
+      this.showAssignDialog = true
+    },
     // 获取角色列表
     async getRoleList() {
-      const { total, rows } = await getRoleListAPI(this.page)
+      const {total, rows} = await getRoleListAPI(this.page)
       // console.log(total, rows)
       this.page.total = total
       // 将数据保存到定义的数组中

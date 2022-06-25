@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import {getRoleListAPI, addRoleAPI, deleteRoleAPI, getRoleDetailAPI, updateRoleAPI} from '@/api/setting'
+import {addRoleAPI, deleteRoleAPI, getRoleDetailAPI, getRoleListAPI, updateRoleAPI} from '@/api/setting'
 import AssignPerm from './components/assign-perm'
 
 export default {
@@ -120,6 +120,8 @@ export default {
     // 分配权限点击事件,出现弹层
     openAssign(id) {
       this.showAssignDialog = true
+      // 调用子组件中的方法，数据回显
+      this.$refs.aperm.getRoleDetail(id)
     },
     // 获取角色列表
     async getRoleList() {
@@ -174,6 +176,12 @@ export default {
         deleteRoleAPI(row.id).then(res => {
           this.getRoleList()
           this.$message.success('删除角色成功')
+          // 解决删除最后一页面显示无数据bug
+          if (this.roleList.length === 1) {
+            if (this.page.page > 1) {
+              this.page.page--
+            }
+          }
         })
       }).catch(() => {
         this.$message({

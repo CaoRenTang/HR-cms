@@ -1,5 +1,6 @@
 // 1.导入request模块
 import request from '@/utils/request'
+
 /**
  * @description: 获取角色列表
  * @param {*} params:{page, pagesize}
@@ -34,6 +35,7 @@ export const deleteRoleAPI = (id) => {
     method: 'delete'
   })
 }
+
 /**
  * @description: 获取角色详情
  * @param {*} id 角色id
@@ -44,6 +46,7 @@ export function getRoleDetailAPI(id) {
     url: `/sys/role/${id}`
   })
 }
+
 /**
  * @description: 编辑角色
  * @param {*} data
@@ -54,5 +57,18 @@ export function updateRoleAPI(data) {
     url: `/sys/role/${data.id}`,
     data,
     method: 'put'
+  })
+}
+
+/**
+ *
+ * @param {*} data 给角色分配权限 {id:角色id, permIds:[] 所有选中的节点的id组成的数组}
+ * @returns
+ */
+export function assignPermAPI(data) {
+  return request({
+    url: '/sys/role/assignPrem',
+    method: 'put',
+    data
   })
 }

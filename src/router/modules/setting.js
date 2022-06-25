@@ -7,8 +7,8 @@ export default {
     // 员工管理子页面
     path: '',
     // 后期权限控制
-    name: 'setting',
+    name: 'settings',
     component: () => import('@/views/setting'),
-    meta: { title: '角色管理', icon: 'setting' }
+    meta: {title: '角色管理', icon: 'setting'}
   }]
 }

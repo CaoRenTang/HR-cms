@@ -8,8 +8,10 @@ const VIP = ['/login', '/404']
 import NProgress from 'nprogress'
 // 引入进度条样式
 import 'nprogress/nprogress.css'
+// 导入router路由实例
+import {asyncRoutes} from './router'
 // 添加路由前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   // 开启滚动条
   NProgress.start()
   // 有token
@@ -23,13 +25,25 @@ router.beforeEach((to, from, next) => {
       next()
       // 通过判断避免切换页面重复发请求
       if (!store.getters.name) {
-        store.dispatch('user/getUserInfoAction')
+        const roles = await store.dispatch('user/getUserInfoAction')
+        console.log('当前登录人的权限数据：', roles)
+        //  根据登录人的权限数据roles，控制登录人访问的动态路由
+        const canLook = asyncRoutes.filter(item => {
+          /**
+           * 循环动态路由子路由的name，判断是否在登录人返回的权限标识中:
+           * 1. 在 =》可以访问
+           * 2. 不在 =》不能访问
+           */
+          return roles.menus.includes(item.children[0].name)
+        })
+        console.log('当前登录能看的页面：', canLook)
+        router.addRoutes([...canLook, {path: '*', redirect: '/404', hidden: true}])
       }
     }
   } else {
     // 没有token，是否在白名单
     if (VIP.includes(to.path)) {
-    // 在白名单放行
+      // 在白名单放行
       next()
     } else {
       // 不在白名单,跳到登录页

@@ -3,6 +3,7 @@
  */
 import { getToken, setToken, removeToken } from '@/utils/auth.js'
 import { loginAPI, getUserInfoAPI, getUserDetailByIdAPI } from '@/api/user'
+
 export default {
   // 模块化加锁
   namespaced: true,
@@ -47,9 +48,12 @@ export default {
     async getUserInfoAction(res) {
       // 获取用户个人信息，但没有头像
       const userInfo = await getUserInfoAPI()
+      console.log('当前用户个人信息：', userInfo)
       // 获取用户个人信息的头像
       const baseInfo = await getUserDetailByIdAPI(userInfo.userId)
-      res.commit('setUserInfo', { ...userInfo, ...baseInfo })
+      res.commit('setUserInfo', {...userInfo, ...baseInfo})
+      // 返回当前登录人的权限数据
+      return userInfo.roles
     },
     // 退出登录
     logoutAction({ commit }) {

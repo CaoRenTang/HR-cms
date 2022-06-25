@@ -77,7 +77,7 @@ const createRouter = () => new Router({
   // 控制路由滚动行为  滚动到顶部
   scrollBehavior: () => ({ y: 0 }),
   // 组合到一起形成完成路由表
-  routes: [...constantRoutes, ...asyncRoutes]
+  routes: [...constantRoutes]
 })
 
 const router = createRouter()

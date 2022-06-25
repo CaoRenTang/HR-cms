@@ -2,7 +2,8 @@
  * 存储用户信息,token、个人信息
  */
 import { getToken, setToken, removeToken } from '@/utils/auth.js'
-import { loginAPI, getUserInfoAPI, getUserDetailByIdAPI } from '@/api/user'
+import {loginAPI, getUserInfoAPI, getUserDetailByIdAPI} from '@/api/user'
+import {resetRouter} from '@/router'
 
 export default {
   // 模块化加锁
@@ -61,6 +62,12 @@ export default {
       commit('delToken')
       // 删除用户信息
       commit('delUserInfo')
+      // 1. 重置路由， 避免缓存
+      resetRouter()
+      // 2. 清除菜单数据，只留下静态路由
+      // 说明❓：user模块调用menus模块中mutations方法，
+      // 需要传入 {root:true}，才能跨模块调用
+      commit('menus/setList', [], {root: true})
     }
   }
 }

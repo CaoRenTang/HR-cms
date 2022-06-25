@@ -11,7 +11,7 @@
       <el-checkbox v-for="item in list" :key="item.id" :label="item.id">{{ item.name }}</el-checkbox>
     </el-checkbox-group>
     <template #footer>
-      <el-button size="small" type="primary">确定</el-button>
+      <el-button size="small" type="primary" @click="clickSubmit">确定</el-button>
       <el-button size="small" @click="close">取消</el-button>
     </template>
   </el-dialog>
@@ -20,6 +20,7 @@
 <script>
 import {getRoleListAPI} from '@/api/setting'
 import {getUserDetailByIdAPI} from '@/api/user'
+import {assignRolesAPI} from '@/api/employees'
 
 export default {
   // 父组件传递的，控制显隐
@@ -59,6 +60,17 @@ export default {
       // 将获取的数据保存到定义的数组变量中
       this.list = res.rows
       // console.log(this.list)
+    },
+    // 确定按钮点击事件
+    async clickSubmit() {
+      await assignRolesAPI({
+        id: this.userId,
+        roleIds: this.roleIds
+      })
+      // 分配角色成功
+      this.$message.success('分配角色成功')
+      // 关闭弹层
+      this.$emit('update:showRoleDialog', false)
     }
   }
 }

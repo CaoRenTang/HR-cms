@@ -1,7 +1,7 @@
 /**
  * 存储用户信息,token、个人信息
  */
-import { getToken, setToken, removeToken } from '@/utils/auth.js'
+import {getToken, setToken, removeToken} from '@/utils/auth.js'
 import {loginAPI, getUserInfoAPI, getUserDetailByIdAPI} from '@/api/user'
 import {resetRouter} from '@/router'
 

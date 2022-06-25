@@ -36,6 +36,8 @@ router.beforeEach(async (to, from, next) => {
            */
           return roles.menus.includes(item.children[0].name)
         })
+        // 储存动态路由
+        store.commit('menus/setList', canLook)
         console.log('当前登录能看的页面：', canLook)
         router.addRoutes([...canLook, {path: '*', redirect: '/404', hidden: true}])
       }

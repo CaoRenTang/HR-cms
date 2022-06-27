@@ -25,6 +25,7 @@
             <span>工作日历</span>
           </div>
           <!-- 放置日历组件 -->
+          <work/>
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -106,7 +107,9 @@
 
 <script>
 // 映射登录人信息
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
+// 引入日历组件
+import work from './components/work-calendar'
 
 export default {
   name: 'Dashboard',
@@ -116,6 +119,10 @@ export default {
       'name', // 用户名
       'avatar' // 头像
     ])
+  },
+  // 局部注册日历组件
+  components: {
+    work
   }
 }
 </script>

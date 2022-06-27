@@ -10,8 +10,7 @@ export default {
       // 全局混入变量
       num: 1000
     }
-  },
-  // 全局混入公共方法
+  }, // 全局混入公共方法
   methods: {
     /**
      * 检查当前登录人是否可以使用某个按钮权限：
@@ -24,8 +23,10 @@ export default {
      * @param {*} point 检测的权限点标识（身份象征）
      */
     checkPoints(point) {
-      const {points} = store.state.user.userInfo.roles
-      return points.includes(point)
+      const {userInfo} = store.state.user
+      // return points.includes(point)
+      // 解决退出时报错
+      return userInfo.roles?.points.includes(point)
     }
   }
 }

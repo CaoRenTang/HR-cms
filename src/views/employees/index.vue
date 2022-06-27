@@ -6,7 +6,7 @@
           <PageTools>
             <!-- 插入到left插槽位置 -->
             <template #left>
-              <span>员工总人数:{{ total }}</span>
+              <span>员工总人数:{{ total }} - 全局变量{{ num }}</span>
             </template>
             <!-- 插入到right插槽位置 -->
             <template #right>
@@ -151,6 +151,7 @@ export default {
   },
   created() {
     this.getEmployeeList()
+    this.eat()
   },
   methods: {
     // 图片二维码点击事件

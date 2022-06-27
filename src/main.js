@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 // 导入vue插件注册的全局组件
 import Components from './components'
+
 Vue.use(Components)
 import '@/styles/index.scss' // global css
 
@@ -21,6 +22,11 @@ import * as directives from '@/directive'
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
+// 入口中混入全局方法
+import checkPoints from '@/mixin/index'
+// 注册混入
+Vue.mixin(checkPoints)
+
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

@@ -8,8 +8,9 @@
             <img :src="avatar">
           </div>
           <div class="headInfoTip">
+            <!--            <p class="firstChild">早安，{{ $store.state.user.userInfo.username }}，祝你开心每一天！</p>-->
             <p class="firstChild">早安，{{ name }}，祝你开心每一天！</p>
-            <p class="lastChild">早安，{{ name }}，祝你开心每一天！</p>
+            <p class="lastChild">{{ deptName }} | {{ iphone }}</p>
           </div>
         </div>
         <div class="fr"/>
@@ -117,7 +118,9 @@ export default {
     // 通过映射渲染登录人的信息
     ...mapGetters([
       'name', // 用户名
-      'avatar' // 头像
+      'avatar', // 头像
+      'deptName', // 部门
+      'iphone' // 手机号
     ])
   },
   // 局部注册日历组件

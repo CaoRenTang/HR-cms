@@ -1,5 +1,12 @@
 <template>
-  <el-calendar v-model="currentDate"/>
+  <el-calendar v-model="currentDate">
+    <template #dateCell="{ date, data }">
+      <div class="date-content">
+        <span class="text">{{ getDay(data.day) }}</span>
+        <span v-if="isWeek(date)" class="rest">休</span>
+      </div>
+    </template>
+  </el-calendar>
 </template>
 
 <script>
@@ -7,6 +14,17 @@ export default {
   data() {
     return {
       currentDate: new Date()
+    }
+  },
+  methods: {
+    // 天
+    getDay(value) {
+      const day = value.split('-')[2] // 11, 02
+      return day
+    },
+    // 是否周末
+    isWeek(date) {
+      return date.getDay() === 6 || date.getDay() === 0
     }
   }
 }

@@ -111,9 +111,10 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   computed: {
+    // 通过映射渲染登录人的信息
     ...mapGetters([
-      'name',
-      'avatar'
+      'name', // 用户名
+      'avatar' // 头像
     ])
   }
 }

@@ -5,11 +5,11 @@
       <div>
         <div class="fl headL">
           <div class="headImg">
-            <img src="@/assets/common/head.jpg">
+            <img :src="avatar">
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">早安，管理员，祝你开心每一天！</p>
-            <p class="lastChild">早安，管理员，祝你开心每一天！</p>
+            <p class="firstChild">早安，{{ name }}，祝你开心每一天！</p>
+            <p class="lastChild">早安，{{ name }}，祝你开心每一天！</p>
           </div>
         </div>
         <div class="fr"/>
@@ -112,7 +112,8 @@ export default {
   name: 'Dashboard',
   computed: {
     ...mapGetters([
-      'userName'
+      'name',
+      'avatar'
     ])
   }
 }

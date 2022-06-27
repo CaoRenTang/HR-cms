@@ -19,6 +19,7 @@ export default {
   methods: {
     // 天
     getDay(value) {
+      // time.split('-') =>['2022','06','27'] 去数组最后的一个元素，下标为2
       const day = value.split('-')[2] // 11, 02
       return day
     },

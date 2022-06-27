@@ -3,6 +3,8 @@ import Vue from 'vue'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
+// 引入echarts
+import * as echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css'
 // import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 // 导入vue插件注册的全局组件
@@ -28,6 +30,7 @@ import checkPoints from '@/mixin/index'
 Vue.mixin(checkPoints)
 
 Vue.use(ElementUI)
+Vue.use(echarts)
 
 Vue.config.productionTip = false
 // 定义一个全局指令，所有页面都可以使用

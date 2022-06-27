@@ -18,7 +18,13 @@
                 @click="exportData"
               >导出excel
               </el-button>
-              <el-button size="small" type="primary" @click="addEmployeeFn">新增员工</el-button>
+              <el-button
+                v-if="checkPoints('p-em-add')"
+                size="small"
+                type="primary"
+                @click="addEmployeeFn"
+              >新增员工
+              </el-button>
             </template>
           </PageTools>
         </div>
@@ -151,7 +157,6 @@ export default {
   },
   created() {
     this.getEmployeeList()
-    this.eat()
   },
   methods: {
     // 图片二维码点击事件

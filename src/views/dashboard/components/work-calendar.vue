@@ -30,7 +30,6 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
 ::v-deep .el-calendar-day {
   height: 50px;

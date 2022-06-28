@@ -8,11 +8,13 @@
     </div>
 
     <div class="right-menu">
+      <!-- 控制全屏 -->
+      <ScreenFull class="ricon"/>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imgError="defImg" :src="avatar" class="user-avatar">
           <span class="name">{{ name }}</span>
-          <i class="el-icon-caret-bottom" style="color:#fff" />
+          <i class="el-icon-caret-bottom" style="color:#fff"/>
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
@@ -80,6 +82,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//全屏显示按钮样式
+.ricon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 20px;
+}
+
 .navbar {
   height: 50px;
   overflow: hidden;

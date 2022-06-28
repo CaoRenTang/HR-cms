@@ -1,5 +1,9 @@
 <template>
-  <el-calendar v-model="currentDate">
+  <!--   :key="$i18n.locale"解决日历组件国际化切换语言的时候，星期不能切换-->
+  <el-calendar
+    :key="$i18n.locale"
+    v-model="currentDate"
+  >
     <template #dateCell="{ date, data }">
       <div class="date-content">
         <span class="text">{{ getDay(data.day) }}</span>
@@ -53,6 +57,7 @@ export default {
   font-size: 12px;
   //margin-left: 10px;
 }
+
 .date-content .text {
   width: 20px;
   height: 20px;

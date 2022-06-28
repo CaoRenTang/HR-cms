@@ -3,22 +3,11 @@
 </template>
 
 <script>
-// import * as echarts from 'echarts'
-// 按需引入
-// 1. 导入所有依赖
-// import * as echarts from 'echarts'
-// 2. 按需引入=》只导入绘制雷达图需要的依赖
-import * as echarts from 'echarts/core'
-import {TooltipComponent, LegendComponent} from 'echarts/components'
-import {RadarChart} from 'echarts/charts'
-import {CanvasRenderer} from 'echarts/renderers'
-
-echarts.use([TooltipComponent, LegendComponent, RadarChart, CanvasRenderer])
 export default {
   name: 'Radar',
   mounted() {
     // 基于准备好的dom，初始化echarts实例
-    const myChart = echarts.init(this.$refs.myDiv)
+    const myChart = this.echarts.init(this.$refs.myDiv)
     // 绘制图表
     myChart.setOption({
       // 标题
@@ -27,9 +16,9 @@ export default {
       // },
       tooltip: {},
       // 图例
-      // legend: {
-      //   data: ['张三', '李四']
-      // },
+      legend: {
+        data: ['张三', '李四']
+      },
       // 配置项
       radar: {
         // shape: 'circle',
@@ -75,6 +64,6 @@ export default {
 <style scoped>
 .radar-echart {
   width: 100%;
-  height: 400px;
+  height: 500px;
 }
 </style>

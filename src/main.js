@@ -28,9 +28,12 @@ import * as directives from '@/directive'
 import checkPoints from '@/mixin/index'
 // 注册混入
 Vue.mixin(checkPoints)
-
 Vue.use(ElementUI)
 Vue.use(echarts)
+// 导入echarts插件并注册
+import echartsPlugins from '@/utils/plugins'
+
+Vue.use(echartsPlugins)
 
 Vue.config.productionTip = false
 // 定义一个全局指令，所有页面都可以使用

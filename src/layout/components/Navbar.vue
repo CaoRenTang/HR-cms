@@ -8,6 +8,8 @@
     </div>
 
     <div class="right-menu">
+      <!-- 语言包 -->
+      <Lang class="ricon"/>
       <!-- 控制全屏 -->
       <ScreenFull class="ricon"/>
       <el-dropdown class="avatar-container" trigger="click">

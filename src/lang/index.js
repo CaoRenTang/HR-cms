@@ -6,13 +6,15 @@ import elementZH from 'element-ui/lib/locale/lang/zh-CN' // 引入饿了么的�
 import customZH from './zh'
 // 引入自定义英文包
 import customEN from './en'
+// 持久化存储当前切换的语言
+import Cookie from 'js-cookie'
 
 Vue.use(VueI18n) // 全局注册国际化包
 
 // 创建国际化插件的实例
 const i18n = new VueI18n({
   // 指定语言类型 zh表示中文  en表示英文
-  locale: 'zh',
+  locale: Cookie.get('hr-language') || 'zh',
   messages: {
     // 英文环境下的语言数据
     en: {

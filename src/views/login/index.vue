@@ -4,14 +4,14 @@
       ref="loginForm"
       :model="loginForm"
       :rules="loginRules"
-      class="login-form"
       auto-complete="on"
+      class="login-form"
       label-position="left"
     >
       <!--      登录页面的logo-->
       <div class="title-container">
         <h3 class="title">
-          <img src="@/assets/common/login-logo.png" alt="">
+          <img alt="" src="@/assets/common/login-logo.png">
         </h3>
       </div>
 
@@ -22,11 +22,11 @@
         <el-input
           ref="mobile"
           v-model="loginForm.mobile"
-          placeholder="请输入手机号"
-          name="mobile"
-          type="text"
-          tabindex="1"
           auto-complete="on"
+          name="mobile"
+          placeholder="请输入手机号"
+          tabindex="1"
+          type="text"
         />
       </el-form-item>
 
@@ -43,10 +43,10 @@
           ref="password"
           v-model="loginForm.password"
           :type="passwordType"
-          placeholder="请输入密码"
-          name="password"
-          tabindex="2"
           auto-complete="on"
+          name="password"
+          placeholder="请输入密码"
+          tabindex="2"
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
@@ -56,8 +56,8 @@
 
       <el-button
         :loading="loading"
-        type="primary"
         style="width:100%;margin-bottom:30px;"
+        type="primary"
         @click="handleLogin"
       >Login
       </el-button>
@@ -89,7 +89,7 @@ export default {
           { required: true, trigger: 'blur', message: '请输入手机号' },
           // 正则校验手机号
           {
-            pattern: /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
+            pattern: /^(0|86|17951)?(13\d|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/,
             trigger: 'blur',
             message: '请输入正确的手机号'
           }

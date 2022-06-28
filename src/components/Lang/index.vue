@@ -14,10 +14,14 @@
   </el-dropdown>
 </template>
 <script>
+import Cookie from 'js-cookie'
+
 export default {
   methods: {
     changeLanguage(lang) {
       this.$i18n.locale = lang // 设置给本地的i18n插件
+      // 持久化存储当前切换的语言
+      Cookie.set('hr-language', lang)
       this.$message.success('切换多语言成功')
     }
   }

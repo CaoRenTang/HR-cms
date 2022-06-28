@@ -21,6 +21,7 @@ export default {
   },
   // 监听全屏状态
   created() {
+    // isEnabled组件内置方法
     if (sf.isEnabled) {
       sf.on('change', () => {
         if (sf.isFullscreen) {

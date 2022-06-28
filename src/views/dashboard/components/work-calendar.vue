@@ -19,7 +19,6 @@ export default {
   methods: {
     // 天
     getDay(value) {
-      // time.split('-') =>['2022','06','27'] 去数组最后的一个元素，下标为2
       const day = value.split('-')[2] // 11, 02
       return day
     },
@@ -52,9 +51,8 @@ export default {
   line-height: 20px;
   display: inline-block;
   font-size: 12px;
-  margin-left: 10px;
+  //margin-left: 10px;
 }
-
 .date-content .text {
   width: 20px;
   height: 20px;

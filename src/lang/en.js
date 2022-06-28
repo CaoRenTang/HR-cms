@@ -76,6 +76,7 @@ export default {
 
   },
   navbar: {
+    title: 'Jiangsu Chuanzhi Podcast Education Technology Co., Ltd.',
     search: 'search',
     logOut: 'Log Out',
     dashboard: 'Dashboard',

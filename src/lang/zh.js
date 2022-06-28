@@ -74,6 +74,7 @@ export default {
     'permissions': '权限管理' // 权限管理
   },
   navbar: {
+    title: '江苏传智播客教育科技有限公司',
     search: '站内搜索',
     logOut: '退出登录',
     dashboard: '首页',
